@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0200, REQ-0210, REQ-0220, REQ-0230, REQ-0240, REQ-0250, REQ-0260, REQ-0570, REQ-0600, REQ-0610, REQ-0620, REQ-0630, REQ-0645, REQ-0650, REQ-0660, REQ-0670, REQ-0680, REQ-0690, REQ-0605, REQ-0607, REQ-0696, REQ-0697, REQ-0698]
+states: [REQ-0200, REQ-0210, REQ-0220, REQ-0230, REQ-0240, REQ-0250, REQ-0260, REQ-0570, REQ-0600, REQ-0610, REQ-0620, REQ-0630, REQ-0645, REQ-0650, REQ-0660, REQ-0670, REQ-0680, REQ-0690, REQ-0605, REQ-0607, REQ-0696, REQ-0697, REQ-0698, REQ-0615, REQ-0694, REQ-0699]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -51,6 +51,9 @@ It must do the following, as the requirements in force state:
 - The configuration must offer rename and code actions in every buffer whose language server provides them. (REQ-0696)
 - When the user saves a Rust file, the configuration must show clippy's diagnostics. (REQ-0697)
 - Crate completions must appear only in `Cargo.toml`. (REQ-0698)
+- The tree-sitter parsers for the configured languages must be installed without the user asking. (REQ-0615)
+- TypeScript inlay hints must not show a variable's type, or an argument's parameter name, where the code already shows it. (REQ-0694)
+- The configuration must show code lenses only when the user asks for them. (REQ-0699)
 
 What it does now:
 

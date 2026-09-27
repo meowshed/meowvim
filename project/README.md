@@ -48,3 +48,31 @@ The specifications of meowvim, one per part of the system.
 | [BUG-0210](bugs/BUG-0210-readme-omits-mise-tools.md) | The README omits three tools `mise install` fetches | minor | approved |
 | [BUG-0220](bugs/BUG-0220-docs-name-core-enable-copilot.md) | The docs name `core.enable_copilot` as Copilot's switch | minor | approved |
 | [BUG-0230](bugs/BUG-0230-health-reports-copilot-from-wrong-key.md) | The health check reports Copilot's state from `core.enable_copilot` | minor | approved |
+| [BUG-0240](bugs/BUG-0240-stylua-parses-lua52.md) | stylua is set to parse Lua 5.2, not LuaJIT | minor | approved |
+| [BUG-0250](bugs/BUG-0250-readme-has-no-build-badge.md) | The README has no build-status badge | minor | approved |
+| [BUG-0260](bugs/BUG-0260-readme-credits-no-plugins.md) | The README credits none of the plugins it uses | minor | approved |
+
+## Onboarding gaps, settled
+
+`onboarding.md` is approved and frozen, so the answers to its gaps live where each belongs. The owner answered gaps 3, 4, 5, 7 and 12 on 2026-09-27, and asked Claude to answer the rest the same day; each of Claude's choices says so in the record that holds it.
+
+| Gap | Answer | Where |
+| --- | --- | --- |
+| 1 | The quality goals are ranked | `vision.md`, Quality goals |
+| 2 | The meowctl audience merges into the owner's row; why not LazyVim isn't recorded | `vision.md`, Who it is for |
+| 3 | Each of the 18 decisions addresses the need it serves | the `addresses` of each |
+| 4, 5 | Reversed choices and obligations are recorded as superseded or withdrawn | `adrs/`, `requirements/` |
+| 6 | Issue #1's README obligations are recorded, 14 in force and 6 withdrawn | `REQ-0880` to `REQ-0899`, `BUG-0250`, `BUG-0260` |
+| 7 | The 21 bot suggestions are recorded as rejected | `REQ-1200` to `REQ-1240` |
+| 8 | Decisions stated only in code comments stay in the code, because onboarding records only what a person wrote down | this table |
+| 9 | Code lens and pruned TypeScript hints hold; the Zellij image switch and `<leader>R` are gone | `ADR-0880` to `ADR-0910` |
+| 10 | #56 should land; `REQ-0180` rests on it | pull request #56 |
+| 11 | `REQ-0350` holds, and the code breaks it | `BUG-0150` |
+| 12 | `toggles.copilot` is the switch | `REQ-0645`, `BUG-0220`, `BUG-0230` |
+| 13 | The taglines go; the README's note on puns is about the code and stays | `REQ-0875` |
+| 14 | Needs that bind the user, such as a Nerd Font, stay in the docs and aren't requirements | this table |
+| 15 to 26 | Filed as defects | `bugs/` |
+| 27 | stylua parses Lua 5.2 where Neovim runs LuaJIT | `REQ-0988`, `BUG-0240` |
+| 28 | Not a defect: Homebrew's neovim formula depends on tree-sitter, so the CI comment holds | this table |
+| 29 | Open until `paw` writes more than one index block per file | this file |
+| 30 | Every requirement in force is stated by one specification | `specs/` |

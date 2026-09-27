@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0900, REQ-0910, REQ-0920, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0850, REQ-0970, REQ-0980, REQ-0990, REQ-0860, REQ-0870, REQ-0985, REQ-0986, REQ-0987]
+states: [REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0900, REQ-0910, REQ-0920, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0850, REQ-0970, REQ-0980, REQ-0990, REQ-0860, REQ-0870, REQ-0985, REQ-0986, REQ-0987, REQ-0878, REQ-0880, REQ-0881, REQ-0882, REQ-0883, REQ-0884, REQ-0885, REQ-0886, REQ-0887, REQ-0888, REQ-0889, REQ-0890, REQ-0891, REQ-0892, REQ-0893, REQ-0988]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -13,7 +13,7 @@ states: [REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0900, REQ-0910, R
 
 ## Scope
 
-This covers the test script, the docs check, the update script, CI and the lint settings.
+This covers the test script, the docs check, the update script, CI, the lint settings, and the README and guides those checks keep honest.
 
 ## Boundary
 
@@ -47,6 +47,22 @@ It must do the following, as the requirements in force state:
 - An update must be reversible to the plugin versions it replaced. (REQ-0985)
 - The repository must not carry binary image files. (REQ-0986)
 - Each plugin must be configured in exactly one spec file. (REQ-0987)
+- The docs must name JetBrains Mono Nerd Font as the recommended font. (REQ-0878)
+- The README must open with the project's name and what it is. (REQ-0880)
+- The README must list the configuration's features. (REQ-0881)
+- The README must state the prerequisites, including the minimum Neovim version. (REQ-0882)
+- The README must tell a new user how to get started after installing. (REQ-0883)
+- The README must explain how to customise the configuration. (REQ-0884)
+- The README must tell a contributor how to contribute. (REQ-0885)
+- The README must state the licence. (REQ-0886)
+- The README must be written for a reader who has never used meowvim. (REQ-0887)
+- Every code block in the README must name its language. (REQ-0888)
+- The README must show badges for the licence and for the build status. (REQ-0889; broken now, BUG-0250)
+- Every link in the README must resolve. (REQ-0890)
+- A new reader must be able to tell what meowvim is within 30 seconds of opening the README. (REQ-0891)
+- The installation instructions must work on a fresh system. (REQ-0892)
+- The README must credit the plugins the configuration uses. (REQ-0893; broken now, BUG-0260)
+- The formatter must parse the Lua dialect Neovim runs, LuaJIT. (REQ-0988; broken now, BUG-0240)
 
 What it does now:
 

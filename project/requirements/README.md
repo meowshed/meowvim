@@ -2,13 +2,17 @@
 
 <!-- meow-flow index -->
 
-142 requirements in all: 97 approved, 21 rejected, 1 superseded, 23 withdrawn.
+176 requirements in all: 116 approved, 21 rejected, 1 superseded, 38 withdrawn.
 
 | Identifier | What it requires | Status |
 | --- | --- | --- |
 | [REQ-0100](REQ-0100-neovim-0-12-or-later.md) | The configuration MUST run on Neovim 0.12 or later. | approved |
 | [REQ-0101](REQ-0101-neovim-0-11-or-later.md) | The configuration MUST run on Neovim 0.11 or later. | withdrawn |
 | [REQ-0105](REQ-0105-works-without-gui.md) | The configuration MUST work fully in a terminal, with no GUI client. | approved |
+| [REQ-0106](REQ-0106-no-images-in-zellij.md) | The configuration MUST turn image previews off inside Zellij. | withdrawn |
+| [REQ-0107](REQ-0107-fixed-window-title.md) | The window title MUST read "MeowVim - Purr-fect Neovim". | withdrawn |
+| [REQ-0108](REQ-0108-install-inits-submodules.md) | The installation instructions MUST initialise and update git submodules. | withdrawn |
+| [REQ-0109](REQ-0109-recommend-fzf.md) | The docs MUST list fzf as a recommended dependency. | withdrawn |
 | [REQ-0110](REQ-0110-minimal-install-works.md) | The configuration MUST start and edit files when only Neovim, Git and a true-colour terminal are installed. | approved |
 | [REQ-0111](REQ-0111-detect-gui.md) | The configuration MUST detect when it runs inside a GUI client. | withdrawn |
 | [REQ-0112](REQ-0112-gui-font.md) | The configuration MUST configure the GUI client's font and rendering. | withdrawn |
@@ -55,6 +59,7 @@
 | [REQ-0430](REQ-0430-copilot-ghost-text-distinct.md) | The configuration MUST render Copilot ghost text so that it stands apart from normal code in every bundled theme. | approved |
 | [REQ-0440](REQ-0440-day-night-mode-persists.md) | When the user changes the day/night mode, the new mode MUST still be in effect after a restart. | approved |
 | [REQ-0445](REQ-0445-editor-and-terminal-switch-together.md) | When the system appearance changes under meowctl, the editor and the terminal MUST switch to the matching theme together. | approved |
+| [REQ-0446](REQ-0446-default-macchiato.md) | The default theme MUST be Catppuccin Macchiato. | withdrawn |
 | [REQ-0500](REQ-0500-leader-is-entry-point.md) | The configuration MUST make the leader key the main entry point for its functions. | approved |
 | [REQ-0510](REQ-0510-navigation-degrades.md) | The LSP navigation mappings MUST NOT open an empty window when no language server answers. | approved |
 | [REQ-0520](REQ-0520-document-symbols-fallback.md) | `<leader>ns` MUST list treesitter symbols when no language server provides document symbols. | approved |
@@ -73,6 +78,7 @@
 | [REQ-0606](REQ-0606-tab-out-of-brackets.md) | The configuration MUST let the user tab out of a closing bracket. | withdrawn |
 | [REQ-0607](REQ-0607-toggle-comments.md) | The configuration MUST toggle comments on a line or a selection. | approved |
 | [REQ-0610](REQ-0610-large-format-after-write.md) | The configuration MUST format a buffer longer than 800 lines after the write, so that the write doesn't wait for the formatter. | approved |
+| [REQ-0615](REQ-0615-parsers-installed-unasked.md) | The tree-sitter parsers for the configured languages MUST be installed without the user asking. | approved |
 | [REQ-0620](REQ-0620-one-formatter.md) | The configuration MUST format through conform.nvim alone, with the language servers' own formatting turned off. | approved |
 | [REQ-0630](REQ-0630-prettier-follows-project.md) | The configuration MUST let prettier read a project's own `.prettierrc`. | approved |
 | [REQ-0640](REQ-0640-copilot-off-by-default.md) | The configuration MUST keep Copilot off until the user turns it on. | superseded |
@@ -82,9 +88,11 @@
 | [REQ-0670](REQ-0670-one-roslyn-client.md) | The configuration MUST NOT start two Roslyn language-server clients for one buffer. | approved |
 | [REQ-0680](REQ-0680-lsp-roots-use-language-markers.md) | The configuration MUST detect a language server's root from that language's usual project markers, not from `.git` alone. | approved |
 | [REQ-0690](REQ-0690-rust-didsave-workaround-scoped.md) | The configuration MUST suppress rust-analyzer's didSave only when the server reports version 1.96. | approved |
+| [REQ-0694](REQ-0694-typescript-hints-not-redundant.md) | TypeScript inlay hints MUST NOT show a variable's type, or an argument's parameter name, where the code already shows it. | approved |
 | [REQ-0696](REQ-0696-rename-and-code-actions.md) | The configuration MUST offer rename and code actions in every buffer whose language server provides them. | approved |
 | [REQ-0697](REQ-0697-clippy-on-save.md) | When the user saves a Rust file, the configuration MUST show clippy's diagnostics. | approved |
 | [REQ-0698](REQ-0698-crate-completion-in-cargo-toml.md) | Crate completions MUST appear only in `Cargo.toml`. | approved |
+| [REQ-0699](REQ-0699-code-lens-on-demand.md) | The configuration MUST show code lenses only when the user asks for them. | approved |
 | [REQ-0700](REQ-0700-session-restore-conditions.md) | The configuration MUST restore a session only when Neovim starts with no file arguments and a session exists for the directory. | approved |
 | [REQ-0710](REQ-0710-hidden-files-in-pickers.md) | The file and project pickers MUST list hidden dotfiles. | approved |
 | [REQ-0720](REQ-0720-hidden-files-in-explorer.md) | The file explorer MUST show hidden dotfiles and directories. | approved |
@@ -100,6 +108,30 @@
 | [REQ-0850](REQ-0850-command-descriptions-accurate.md) | Every user command's description MUST describe what the command does. | approved |
 | [REQ-0860](REQ-0860-name-in-lower-case.md) | The documentation MUST write the project's name as "meowvim". | approved |
 | [REQ-0870](REQ-0870-readme-copy-paste-commands.md) | The README MUST give installation commands a reader can paste as they stand. | approved |
+| [REQ-0875](REQ-0875-readme-keeps-taglines.md) | The README MUST keep the original taglines. | withdrawn |
+| [REQ-0876](REQ-0876-raycast-headers-kept.md) | Shell scripts MUST keep their Raycast metadata after the standard header. | withdrawn |
+| [REQ-0877](REQ-0877-meowg1k-spelling.md) | The AI tool's name MUST be spelled "meowg1k". | withdrawn |
+| [REQ-0878](REQ-0878-recommend-jetbrains-mono.md) | The docs MUST name JetBrains Mono Nerd Font as the recommended font. | approved |
+| [REQ-0880](REQ-0880-readme-opens-with-what-it-is.md) | The README MUST open with the project's name and what it is. | approved |
+| [REQ-0881](REQ-0881-readme-lists-features.md) | The README MUST list the configuration's features. | approved |
+| [REQ-0882](REQ-0882-readme-states-prerequisites.md) | The README MUST state the prerequisites, including the minimum Neovim version. | approved |
+| [REQ-0883](REQ-0883-readme-quick-start.md) | The README MUST tell a new user how to get started after installing. | approved |
+| [REQ-0884](REQ-0884-readme-explains-configuration.md) | The README MUST explain how to customise the configuration. | approved |
+| [REQ-0885](REQ-0885-readme-contributing.md) | The README MUST tell a contributor how to contribute. | approved |
+| [REQ-0886](REQ-0886-readme-licence.md) | The README MUST state the licence. | approved |
+| [REQ-0887](REQ-0887-readme-for-newcomers.md) | The README MUST be written for a reader who has never used meowvim. | approved |
+| [REQ-0888](REQ-0888-readme-code-blocks-tagged.md) | Every code block in the README MUST name its language. | approved |
+| [REQ-0889](REQ-0889-readme-badges.md) | The README MUST show badges for the licence and for the build status. | approved |
+| [REQ-0890](REQ-0890-readme-links-resolve.md) | Every link in the README MUST resolve. | approved |
+| [REQ-0891](REQ-0891-readme-30-seconds.md) | A new reader MUST be able to tell what meowvim is within 30 seconds of opening the README. | approved |
+| [REQ-0892](REQ-0892-install-tested-fresh.md) | The installation instructions MUST work on a fresh system. | approved |
+| [REQ-0893](REQ-0893-readme-credits-plugins.md) | The README MUST credit the plugins the configuration uses. | approved |
+| [REQ-0894](REQ-0894-readme-table-of-contents.md) | The README MUST have a table of contents. | withdrawn |
+| [REQ-0895](REQ-0895-readme-usage-examples.md) | The README MUST have a usage-examples section. | withdrawn |
+| [REQ-0896](REQ-0896-readme-troubleshooting-section.md) | The README MUST have a troubleshooting section. | withdrawn |
+| [REQ-0897](REQ-0897-readme-visuals.md) | The README MUST include screenshots, GIFs or recordings. | withdrawn |
+| [REQ-0898](REQ-0898-install-works-on-windows.md) | The installation MUST work on Windows. | withdrawn |
+| [REQ-0899](REQ-0899-readme-feline-tone.md) | The README MUST keep a playful feline tone. | withdrawn |
 | [REQ-0900](REQ-0900-stylua-formatted.md) | Every Lua file under `lua/` and `init.lua` MUST pass `stylua --check` with the settings in `.stylua.toml`. | approved |
 | [REQ-0910](REQ-0910-luacheck-clean.md) | `luacheck lua/ init.lua` MUST report no warnings with the settings in `.luacheckrc`. | approved |
 | [REQ-0920](REQ-0920-spdx-header.md) | Every Lua and shell file MUST open with the `SPDX-License-Identifier: MIT` line and the copyright line. | approved |
@@ -111,6 +143,7 @@
 | [REQ-0926](REQ-0926-header-blank-comment-after.md) | A header MUST end with exactly one empty comment line. | withdrawn |
 | [REQ-0927](REQ-0927-no-header-in-data-files.md) | JSON, CSV, TSV, lock, generated and vendored files and `LICENSE` MUST NOT carry a header. | withdrawn |
 | [REQ-0928](REQ-0928-header-keeps-file-properties.md) | Adding a header MUST keep the file's encoding, byte-order mark, line endings and permissions. | withdrawn |
+| [REQ-0929](REQ-0929-briefs-written-by-hand.md) | Each header's `@brief` MUST be written by hand. | withdrawn |
 | [REQ-0930](REQ-0930-tests-pass-on-matrix.md) | `bin/test-config.sh` MUST pass on Ubuntu and macOS with both stable and nightly Neovim. | approved |
 | [REQ-0940](REQ-0940-lint-runs-on-macos.md) | The lint check MUST run on macOS as well as on Linux. | approved |
 | [REQ-0950](REQ-0950-user-config-untracked.md) | The repository MUST keep user configuration files out of version control. | approved |
@@ -120,6 +153,7 @@
 | [REQ-0985](REQ-0985-updates-reversible.md) | An update MUST be reversible to the plugin versions it replaced. | approved |
 | [REQ-0986](REQ-0986-no-binary-images.md) | The repository MUST NOT carry binary image files. | approved |
 | [REQ-0987](REQ-0987-one-spec-per-plugin.md) | Each plugin MUST be configured in exactly one spec file. | approved |
+| [REQ-0988](REQ-0988-formatter-parses-luajit.md) | The formatter MUST parse the Lua dialect Neovim runs, LuaJIT. | approved |
 | [REQ-0990](REQ-0990-harness-files-tracked.md) | The repository MUST keep `CLAUDE.md` and `.meowpaw/profile.toml` in version control. | approved |
 | [REQ-0995](REQ-0995-no-agent-configuration.md) | The repository MUST NOT carry configuration for an AI agent. | withdrawn |
 | [REQ-1000](REQ-1000-startup-trends-with-any-history.md) | `:StartupTrends` MUST show the recorded startups whenever at least one is recorded. | approved |
@@ -152,15 +186,15 @@
 By topic:
 
 - diagnostics: REQ-1000, REQ-1010, REQ-1020
-- docs: REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0850, REQ-0860, REQ-0870
-- editing: REQ-0600, REQ-0605, REQ-0606, REQ-0607, REQ-0610, REQ-0620, REQ-0630, REQ-0640, REQ-0645, REQ-0650, REQ-0660, REQ-0670, REQ-0680, REQ-0690, REQ-0696, REQ-0697, REQ-0698
+- docs: REQ-0108, REQ-0109, REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0850, REQ-0860, REQ-0870, REQ-0875, REQ-0877, REQ-0878, REQ-0880, REQ-0881, REQ-0882, REQ-0883, REQ-0884, REQ-0885, REQ-0886, REQ-0887, REQ-0888, REQ-0889, REQ-0890, REQ-0891, REQ-0892, REQ-0893, REQ-0894, REQ-0895, REQ-0896, REQ-0897, REQ-0898, REQ-0899
+- editing: REQ-0600, REQ-0605, REQ-0606, REQ-0607, REQ-0610, REQ-0615, REQ-0620, REQ-0630, REQ-0640, REQ-0645, REQ-0650, REQ-0660, REQ-0670, REQ-0680, REQ-0690, REQ-0694, REQ-0696, REQ-0697, REQ-0698, REQ-0699
 - git: REQ-1100, REQ-1110
 - keymaps: REQ-0500, REQ-0510, REQ-0520, REQ-0530, REQ-0540, REQ-0550, REQ-0560, REQ-0570, REQ-0580, REQ-0590, REQ-0591, REQ-0592, REQ-0593
-- platform: REQ-0100, REQ-0101, REQ-0105, REQ-0110, REQ-0111, REQ-0112, REQ-0113, REQ-0114, REQ-0115, REQ-0116, REQ-0120, REQ-0130, REQ-0140, REQ-0150, REQ-0160, REQ-0170, REQ-0180, REQ-0190, REQ-0195
-- repo: REQ-0900, REQ-0910, REQ-0920, REQ-0921, REQ-0922, REQ-0923, REQ-0924, REQ-0925, REQ-0926, REQ-0927, REQ-0928, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0970, REQ-0980, REQ-0985, REQ-0986, REQ-0987, REQ-0990, REQ-0995
+- platform: REQ-0100, REQ-0101, REQ-0105, REQ-0106, REQ-0107, REQ-0110, REQ-0111, REQ-0112, REQ-0113, REQ-0114, REQ-0115, REQ-0116, REQ-0120, REQ-0130, REQ-0140, REQ-0150, REQ-0160, REQ-0170, REQ-0180, REQ-0190, REQ-0195
+- repo: REQ-0876, REQ-0900, REQ-0910, REQ-0920, REQ-0921, REQ-0922, REQ-0923, REQ-0924, REQ-0925, REQ-0926, REQ-0927, REQ-0928, REQ-0929, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0970, REQ-0980, REQ-0985, REQ-0986, REQ-0987, REQ-0988, REQ-0990, REQ-0995
 - review: REQ-1200, REQ-1202, REQ-1204, REQ-1206, REQ-1208, REQ-1210, REQ-1212, REQ-1214, REQ-1216, REQ-1218, REQ-1220, REQ-1222, REQ-1224, REQ-1226, REQ-1228, REQ-1230, REQ-1232, REQ-1234, REQ-1236, REQ-1238, REQ-1240
 - settings: REQ-0300, REQ-0310, REQ-0320, REQ-0330, REQ-0340, REQ-0350, REQ-0355, REQ-0356, REQ-0357, REQ-0358, REQ-0359, REQ-0360, REQ-0370, REQ-0380, REQ-0390, REQ-0395
-- themes: REQ-0400, REQ-0410, REQ-0420, REQ-0430, REQ-0440, REQ-0445
+- themes: REQ-0400, REQ-0410, REQ-0420, REQ-0430, REQ-0440, REQ-0445, REQ-0446
 - tools: REQ-0200, REQ-0205, REQ-0210, REQ-0220, REQ-0230, REQ-0240, REQ-0250, REQ-0260
 - workspace: REQ-0700, REQ-0710, REQ-0720, REQ-0740, REQ-0750, REQ-0760, REQ-0765
 <!-- /meow-flow index -->

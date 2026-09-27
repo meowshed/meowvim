@@ -31,21 +31,20 @@ Documentation drifts from a configuration one rename at a time, and the drift is
 | -------- | ----- | -------------------------- |
 | The owner, a single developer who writes Go, Python, TypeScript, C#, Rust, Lua and GDScript (from https://github.com/meowshed/meowvim/pull/4#issuecomment-3084435846, high; languages from README.md:43-44, medium) | one configuration that follows each project's toolchain | not recorded |
 | Neovim users arriving from stock Neovim (from ADR-0120, medium) | the built-in mappings they already know, with more on top | stock Neovim |
-| Users of the owner's `meow` environment (from README.md:65-66, high) | an editor that switches theme together with the terminal | not recorded |
 
-The sources don't say what the second and third audiences use today; the onboarding report asks.
+The owner's `meow` environment, which ships meowvim through the dotmeow module (from README.md:65-66, high), is the owner's own, so it counts with the first row. Why LazyVim, one of the named inspirations, wasn't enough isn't recorded, and this vision makes no claim about it.
 
 ## Quality goals
 
-The sources state these goals but no priority among them, so this list isn't ordered; the onboarding report asks for the order.
+Ranked, the first winning a conflict. The sources state the goals but no order; Claude ranked them on 2026-09-27, on the owner's instruction to answer the onboarding gaps. Resilience comes first because pull request #21 names it the core theme, and the editor's responsiveness second because every other goal is felt through it.
 
-- A missing tool costs that feature and nothing else, and a minimal install works (from docs/04-TROUBLESHOOTING.md:11-12 and docs/01-INSTALLATION.md:10-11, high).
-- Startup stays fast: 17 of 83 plugins load at startup, and the last 100 startup times are kept to show regressions (from README.md:9-10, 34-35, high).
-- The editor never blocks on appearance detection or on formatting a large file (from docs/02-CONFIGURATION.md:44-45 and docs/03-WORKFLOWS.md:62-63, high).
-- Settings apply without a restart (from docs/02-CONFIGURATION.md:8-9, high).
-- The docs name only mappings and commands that exist (from CLAUDE.md:40-45, high).
-- Upgrades can be rolled back (from README.md:117-118, high).
-- It behaves under terminal multiplexers such as tmux and Zellij (from https://github.com/meowshed/meowvim/pull/51, high).
+1. A missing tool costs that feature and nothing else, and a minimal install works (from docs/04-TROUBLESHOOTING.md:11-12 and docs/01-INSTALLATION.md:10-11, high).
+2. The editor never blocks on appearance detection or on formatting a large file (from docs/02-CONFIGURATION.md:44-45 and docs/03-WORKFLOWS.md:62-63, high).
+3. Settings apply without a restart (from docs/02-CONFIGURATION.md:8-9, high).
+4. Startup stays fast: 17 of 83 plugins load at startup, and the last 100 startup times are kept to show regressions (from README.md:9-10, 34-35, high).
+5. The docs name only mappings and commands that exist (from CLAUDE.md:40-45, high).
+6. Upgrades can be rolled back (from README.md:117-118, high).
+7. It behaves under terminal multiplexers such as tmux and Zellij (from https://github.com/meowshed/meowvim/pull/51, high).
 
 ## What it will not do
 

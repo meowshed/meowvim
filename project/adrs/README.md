@@ -2,7 +2,7 @@
 
 <!-- meow-flow index -->
 
-67 decisions in all: 50 approved, 17 superseded.
+77 decisions in all: 54 approved, 23 superseded.
 
 | Identifier | What it concluded | Status |
 | --- | --- | --- |
@@ -73,4 +73,14 @@
 | [ADR-0830](ADR-0830-the-crates-source-applies-only-to-cargo-toml.md) | The crates source applies only to Cargo.toml | superseded |
 | [ADR-0840](ADR-0840-meowvim-supports-neovide.md) | meowvim supports Neovide | superseded |
 | [ADR-0850](ADR-0850-files-carry-a-full-mit-licence-header.md) | Files carry a full MIT licence header | superseded |
+| [ADR-0880](ADR-0880-code-lens-runs-on-demand.md) | Code lens runs on demand | approved |
+| [ADR-0890](ADR-0890-typescript-inlay-hints-are-pruned.md) | TypeScript inlay hints are pruned | approved |
+| [ADR-0900](ADR-0900-image-previews-are-off-inside-zellij.md) | Image previews are off inside Zellij | superseded |
+| [ADR-0910](ADR-0910-the-run-group-lives-on-leader-r.md) | The Run group lives on leader R | superseded |
+| [ADR-0920](ADR-0920-parsers-install-on-demand.md) | Parsers install on demand | superseded |
+| [ADR-0930](ADR-0930-parsers-install-synchronously-from-a-large-list.md) | Parsers install synchronously from a large list | superseded |
+| [ADR-0940](ADR-0940-the-default-catppuccin-flavour-is-macchiato.md) | The default Catppuccin flavour is macchiato | superseded |
+| [ADR-0950](ADR-0950-the-readme-has-no-usage-examples-section.md) | The README has no usage-examples section | approved |
+| [ADR-0960](ADR-0960-the-readme-doesn-t-explain-installing-dependencies.md) | The README doesn't explain installing dependencies | approved |
+| [ADR-0970](ADR-0970-the-readme-credits-lazyvim-and-spacemacs.md) | The README credits LazyVim and spacemacs | superseded |
 <!-- /meow-flow index -->
