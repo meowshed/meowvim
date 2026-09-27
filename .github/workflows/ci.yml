@@ -50,13 +50,19 @@ jobs:
           neovim: true
           version: ${{ matrix.nvim-version }}
 
-      - name: Install ripgrep and fd
+      # nvim-treesitter builds its parsers with the tree-sitter CLI. The macOS
+      # runner gets it from Homebrew; without it the Linux plugin install
+      # crashes.
+      - name: Install ripgrep, fd and tree-sitter
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
             sudo apt-get update
             sudo apt-get install -y ripgrep fd-find
             mkdir -p "$HOME/.local/bin"
             ln -s "$(command -v fdfind)" "$HOME/.local/bin/fd"
+            wget -qO- https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz \
+              | gunzip > "$HOME/.local/bin/tree-sitter"
+            chmod +x "$HOME/.local/bin/tree-sitter"
             echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           else
             brew install ripgrep fd
