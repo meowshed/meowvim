@@ -5,8 +5,8 @@ lua = "5.1"
 lua-language-server = "latest"
 # Formatter (config: .stylua.toml)
 stylua = "latest"
-# Linter (config: .luacheckrc)
-"github:lunarmodules/luacheck" = "latest"
+# Linter: luacheck (config: .luacheckrc) comes from `luarocks install luacheck`,
+# because lunarmodules ships no macOS binary for mise to fetch.
 # Tree-sitter CLI (grammar development)
 tree-sitter = "latest"
 # AI coding assistant
