@@ -9,7 +9,7 @@ revised: 2026-09-27
 
 # meowvim
 
-This vision was recovered during onboarding from the README, the guides, `CLAUDE.md`, `TODO.md` and the GitHub history. Every statement names its source and how it was found. Where the sources are silent, it says so, and the onboarding report asks the question.
+This vision was recovered during onboarding from the README, the guides, `CLAUDE.md`, the decisions in `project/adrs/` and the GitHub history. Every statement names its source and how it was found. Where the sources are silent, it says so, and the onboarding report asks the question.
 
 ## What it is
 
@@ -30,7 +30,7 @@ Documentation drifts from a configuration one rename at a time, and the drift is
 | Audience | Wants | What they do today instead |
 | -------- | ----- | -------------------------- |
 | The owner, a single developer who writes Go, Python, TypeScript, C#, Rust, Lua and GDScript (from https://github.com/meowshed/meowvim/pull/4#issuecomment-3084435846, high; languages from README.md:43-44, medium) | one configuration that follows each project's toolchain | not recorded |
-| Neovim users arriving from stock Neovim (from TODO.md:20-21, medium) | the built-in mappings they already know, with more on top | stock Neovim |
+| Neovim users arriving from stock Neovim (from ADR-0120, medium) | the built-in mappings they already know, with more on top | stock Neovim |
 | Users of the owner's `meow` environment (from README.md:65-66, high) | an editor that switches theme together with the terminal | not recorded |
 
 The sources don't say what the second and third audiences use today; the onboarding report asks.
@@ -51,7 +51,7 @@ The sources state these goals but no priority among them, so this list isn't ord
 
 - It will not install language servers, formatters or linters from inside Neovim (from CLAUDE.md:49-50, high).
 - It will not support GUI clients such as Neovide (from https://github.com/meowshed/meowvim/pull/42, high).
-- It will not keep a persistent outline pane or a second diff plugin (from TODO.md:10-15, high).
+- It will not keep a persistent outline pane or a second diff plugin (from ADR-0100 and ADR-0110, high).
 - It will not choose which language servers start through the settings file (from docs/02-CONFIGURATION.md:96, high).
 - It will not format files over 5000 lines (from docs/04-TROUBLESHOOTING.md:99-100, high).
 - It will not test the native Windows build (from docs/01-INSTALLATION.md:67, high).
@@ -59,9 +59,9 @@ The sources state these goals but no priority among them, so this list isn't ord
 ## Risks
 
 - One person maintains it (from https://github.com/meowshed/meowvim/pull/4#issuecomment-3084435846, high), so its review happens mostly through automated reviewers (from the GitHub history, medium).
-- It tracks Neovim 0.12 and nightly, and several fixes work around bugs in a specific Neovim or server version, such as the treesitter range patch and the rust-analyzer 1.96 guard (from lua/utils/patches.lua:10-12 and TODO.md:24-34, high).
+- It tracks Neovim 0.12 and nightly, and several fixes work around bugs in a specific Neovim or server version, such as the treesitter range patch and the rust-analyzer 1.96 guard (from lua/utils/patches.lua:10-12 and ADR-0090, high).
 - The code disagrees with the docs in places the onboarding report lists, such as user editor settings being overwritten at startup (from init.lua:26, 34, high).
 
 ## Where it is going
 
-The sources record no roadmap. `TODO.md` says nothing is open as of its review against Neovim 0.12.5 (from TODO.md:3-6, high), and CI tests Neovim nightly beside stable (from .github/workflows/ci.yml:43, high).
+The sources record no roadmap, and nothing was left open when the project was last reviewed against Neovim 0.12.5 (from TODO.md:3-6 at fc030f6, high). CI tests Neovim nightly beside stable (from .github/workflows/ci.yml:43, high).

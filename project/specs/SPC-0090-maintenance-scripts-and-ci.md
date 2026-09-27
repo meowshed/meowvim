@@ -45,7 +45,7 @@ It must do the following, as the requirements in force state:
 What it does now:
 
 - The test script checks, in order: a clean start, the config module, the user config, plugin stats, lspconfig, installed parsers, the health report, keymap conflicts, the docs check and a Lua syntax pass (from bin/test-config.sh:262-277, high).
-- The docs check reads nine documents and checks every `<leader>` mapping and `:Command` they name against the running configuration, then checks that every user command has a tag in `doc/meowvim.txt` (from bin/check-docs.lua:17-27, 93-144, high).
+- The docs check reads eight documents and checks every `<leader>` mapping and `:Command` they name against the running configuration, then checks that every user command has a tag in `doc/meowvim.txt` (from bin/check-docs.lua:16-25, 92-143, high).
 - The update script saves `lazy-lock.json` as a restore point, runs `Lazy! sync`, checks the health report for the cross marker and prunes old restore points (from bin/update-meowvim.sh:33-108, 120-162, high).
 - CI's lint job runs `stylua --check lua/ init.lua` and `luacheck lua/ init.lua` (from .github/workflows/ci.yml:10-34, high).
 - CI's test job installs ripgrep, fd and, on Linux, the tree-sitter CLI, links the checkout to `~/.config/nvim`, writes a pinned user config, syncs the plugins and runs the test script (from .github/workflows/ci.yml:55-94, high).

@@ -38,7 +38,7 @@ where a reader meets it.
 </principle>
 
 <principle name="the_docs_name_only_what_exists">
-Name a `<leader>` mapping or a `:Command` in `README.md`, `TODO.md`, `docs/`
+Name a `<leader>` mapping or a `:Command` in `README.md`, `docs/`
 or `doc/meowvim.txt` only when the configuration defines it, because a
 renamed mapping otherwise leaves an instruction that no longer works.
 `bin/check-docs.lua` reads every name out of those files and looks each one
