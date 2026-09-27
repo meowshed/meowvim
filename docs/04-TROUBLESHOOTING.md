@@ -145,7 +145,7 @@ meowvim generates a theme from the active colorscheme into its own file under
 `~/.local/state/nvim/meowvim/`, then layers it over yours through
 `LG_CONFIG_FILE`. It never edits your lazygit config.
 
-To keep your own colors, set `git.lazygit_theme_sync = false`.
+To keep your own colours, set `git.lazygit_theme_sync = false`.
 
 ### The diff pickers are empty
 
