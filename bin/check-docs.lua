@@ -16,7 +16,6 @@
 
 local DOCS = {
   "README.md",
-  "TODO.md",
   "docs/01-INSTALLATION.md",
   "docs/02-CONFIGURATION.md",
   "docs/03-WORKFLOWS.md",
