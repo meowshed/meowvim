@@ -20,7 +20,7 @@ start Neovim:
 
 ```bash
 mv ~/.config/nvim ~/.config/nvim.backup
-git clone https://github.com/retran/meowvim.git ~/.config/nvim
+git clone https://github.com/meowshed/meowvim.git ~/.config/nvim
 nvim
 ```
 

@@ -2,7 +2,7 @@
 
 [![Neovim](https://img.shields.io/badge/neovim-%23019733.svg?style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](./LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/retran/meowvim?style=for-the-badge)](https://github.com/retran/meowvim/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/meowshed/meowvim?style=for-the-badge)](https://github.com/meowshed/meowvim/stargazers)
 
 meowvim is a Neovim configuration for Neovim 0.12. It bundles the plugins you
 would expect, and it keeps your own settings in a single Lua file that it
@@ -56,7 +56,7 @@ each missing tool would add.
 
 ```bash
 mv ~/.config/nvim ~/.config/nvim.backup
-git clone https://github.com/retran/meowvim.git ~/.config/nvim
+git clone https://github.com/meowshed/meowvim.git ~/.config/nvim
 nvim
 ```
 
