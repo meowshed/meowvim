@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: []
+states: [REQ-1100, REQ-1110]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -24,7 +24,12 @@ This covers the Git plugins, the GitHub pickers and their mappings. The lazygit 
 
 ## Behaviour
 
-No requirement in force covers this part yet; onboarding gap 30 asks which should. What it does now:
+It must do the following, as the requirements in force state:
+
+- The configuration must show the working tree's Git changes hunk by hunk in a fullscreen view. (REQ-1100)
+- The configuration must let the user stage, commit, pull and push without leaving Neovim. (REQ-1110)
+
+What it does now:
 
 - gitsigns shows signs when `git.enable_signs` isn't false, deleted lines when the toggle is on, and line blame after 500 ms when `git.blame_line` is true (from lua/plugins/gitsigns.lua:10-26, high).
 - neogit runs with its diffview integration off (from lua/plugins/neogit.lua:14-27, high).

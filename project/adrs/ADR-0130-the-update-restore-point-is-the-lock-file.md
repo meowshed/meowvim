@@ -3,7 +3,7 @@ id: ADR-0130
 artifact: adr
 status: approved
 revised: 2026-09-27
-addresses: []
+addresses: [REQ-0985]
 supersedes: []
 ---
 

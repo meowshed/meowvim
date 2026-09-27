@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0300, REQ-0310, REQ-0320, REQ-0330, REQ-0340, REQ-0350, REQ-0360, REQ-0370, REQ-0380, REQ-0390, REQ-0395]
+states: [REQ-0300, REQ-0310, REQ-0320, REQ-0330, REQ-0340, REQ-0350, REQ-0360, REQ-0370, REQ-0380, REQ-0390, REQ-0395, REQ-0355]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -41,6 +41,7 @@ It must do the following, as the requirements in force state:
 - The settings template must write only keys the configuration reads. (REQ-0380; broken now, BUG-0090)
 - Persisting the settings must not write a value that only the current session set, such as a project's theme or a theme auto mode chose. (REQ-0390; broken now, BUG-0120)
 - Persisting the settings must keep the comments in the user config. (REQ-0395; broken now, BUG-0120)
+- When Neovim works in a configured project's directory, the configuration must apply that project's theme. (REQ-0355)
 
 What it does now:
 

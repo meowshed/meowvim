@@ -46,3 +46,5 @@ The specifications of meowvim, one per part of the system.
 | [BUG-0190](bugs/BUG-0190-keymaps-guide-misdescribes-leader-ff.md) | The keymaps guide misdescribes `<leader>ff` | minor | approved |
 | [BUG-0200](bugs/BUG-0200-help-says-plugins-install-on-demand.md) | The help file says plugins install on demand, where they load on demand | minor | approved |
 | [BUG-0210](bugs/BUG-0210-readme-omits-mise-tools.md) | The README omits three tools `mise install` fetches | minor | approved |
+| [BUG-0220](bugs/BUG-0220-docs-name-core-enable-copilot.md) | The docs name `core.enable_copilot` as Copilot's switch | minor | approved |
+| [BUG-0230](bugs/BUG-0230-health-reports-copilot-from-wrong-key.md) | The health check reports Copilot's state from `core.enable_copilot` | minor | approved |

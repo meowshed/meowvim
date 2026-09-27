@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0700, REQ-0710, REQ-0720]
+states: [REQ-0700, REQ-0710, REQ-0720, REQ-0740, REQ-0750, REQ-0760]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -30,6 +30,9 @@ It must do the following, as the requirements in force state:
 - The configuration must restore a session only when Neovim starts with no file arguments and a session exists for the directory. (REQ-0700)
 - The file and project pickers must list hidden dotfiles. (REQ-0710)
 - The file explorer must show hidden dotfiles and directories. (REQ-0720)
+- The configuration must show the indentation scope around the cursor. (REQ-0740)
+- The configuration must keep scratch notes for each working directory. (REQ-0750)
+- The configuration must let the user annotate lines for review and export the annotations. (REQ-0760)
 
 What it does now:
 

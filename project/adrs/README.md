@@ -2,7 +2,7 @@
 
 <!-- meow-flow index -->
 
-50 decisions in all: 50 approved.
+67 decisions in all: 50 approved, 17 superseded.
 
 | Identifier | What it concluded | Status |
 | --- | --- | --- |
@@ -44,7 +44,7 @@
 | [ADR-0360](ADR-0360-copilot-is-opt-in.md) | Copilot is opt-in | approved |
 | [ADR-0370](ADR-0370-review-annotations-use-meow-review-nvim.md) | Review annotations use meow.review.nvim | approved |
 | [ADR-0380](ADR-0380-the-terminal-toggles-on-f2.md) | The terminal toggles on F2 | approved |
-| [ADR-0390](ADR-0390-no-ai-agent-configuration-in-the-repository.md) | No AI agent configuration in the repository | approved |
+| [ADR-0390](ADR-0390-no-ai-agent-configuration-in-the-repository.md) | No AI agent configuration in the repository | superseded |
 | [ADR-0400](ADR-0400-the-theme-follows-the-os-appearance.md) | The theme follows the OS appearance | approved |
 | [ADR-0410](ADR-0410-no-assets-directory.md) | No assets directory | approved |
 | [ADR-0420](ADR-0420-the-name-is-written-in-lower-case.md) | The name is written in lower case | approved |
@@ -56,4 +56,21 @@
 | [ADR-0480](ADR-0480-the-luasnip-build-removes-its-library-first.md) | The LuaSnip build removes its library first | approved |
 | [ADR-0490](ADR-0490-treesitter-textobjects-has-its-own-plugin-spec.md) | Treesitter textobjects has its own plugin spec | approved |
 | [ADR-0500](ADR-0500-completion-is-navigated-with-ctrl-j-and-ctrl-k.md) | Completion is navigated with Ctrl-j and Ctrl-k | approved |
+| [ADR-0510](ADR-0510-the-repository-keeps-its-harness-files.md) | The repository keeps its harness files | approved |
+| [ADR-0700](ADR-0700-mason-installs-the-tools.md) | Mason installs the tools | superseded |
+| [ADR-0710](ADR-0710-the-configuration-requires-neovim-0-11.md) | The configuration requires Neovim 0.11 | superseded |
+| [ADR-0720](ADR-0720-language-servers-find-their-root-with-root-dir.md) | Language servers find their root with root_dir | superseded |
+| [ADR-0730](ADR-0730-mason-lspconfig-doesn-t-enable-servers-itself.md) | mason-lspconfig doesn't enable servers itself | superseded |
+| [ADR-0740](ADR-0740-mini-tabline-shows-the-buffers.md) | mini.tabline shows the buffers | superseded |
+| [ADR-0750](ADR-0750-ultimate-autopair-pairs-brackets.md) | ultimate-autopair pairs brackets | superseded |
+| [ADR-0760](ADR-0760-mini-comment-toggles-comments.md) | mini.comment toggles comments | superseded |
+| [ADR-0770](ADR-0770-mason-installs-copilot-language-server.md) | Mason installs copilot-language-server | superseded |
+| [ADR-0780](ADR-0780-project-settings-live-in-meowvim-yaml.md) | Project settings live in ~/.meowvim.yaml | superseded |
+| [ADR-0790](ADR-0790-project-commands-can-t-run-lua-or-chain-commands.md) | Project commands can't run Lua or chain commands | superseded |
+| [ADR-0800](ADR-0800-project-commands-run-after-a-delay.md) | Project commands run after a delay | superseded |
+| [ADR-0810](ADR-0810-the-project-path-cache-holds-100-entries.md) | The project path cache holds 100 entries | superseded |
+| [ADR-0820](ADR-0820-the-project-list-is-computed-lazily.md) | The project list is computed lazily | superseded |
+| [ADR-0830](ADR-0830-the-crates-source-applies-only-to-cargo-toml.md) | The crates source applies only to Cargo.toml | superseded |
+| [ADR-0840](ADR-0840-meowvim-supports-neovide.md) | meowvim supports Neovide | superseded |
+| [ADR-0850](ADR-0850-files-carry-a-full-mit-licence-header.md) | Files carry a full MIT licence header | superseded |
 <!-- /meow-flow index -->

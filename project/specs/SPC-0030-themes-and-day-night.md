@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0400, REQ-0410, REQ-0420, REQ-0430, REQ-0440]
+states: [REQ-0400, REQ-0410, REQ-0420, REQ-0430, REQ-0440, REQ-0445]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -33,6 +33,7 @@ It must do the following, as the requirements in force state:
 - The configuration must not edit the user's lazygit config. (REQ-0420)
 - The configuration must render Copilot ghost text so that it stands apart from normal code in every bundled theme. (REQ-0430)
 - When the user changes the day/night mode, the new mode must still be in effect after a restart. (REQ-0440; broken now, BUG-0110)
+- When the system appearance changes under meowctl, the editor and the terminal must switch to the matching theme together. (REQ-0445)
 
 What it does now:
 

@@ -1,9 +1,9 @@
 ---
 id: ADR-0390
 artifact: adr
-status: approved
+status: superseded
 revised: 2026-09-27
-addresses: []
+addresses: [REQ-0995]
 supersedes: []
 ---
 

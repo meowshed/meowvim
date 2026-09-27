@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0100, REQ-0110, REQ-0120, REQ-0130, REQ-0140, REQ-0150, REQ-0160, REQ-0170, REQ-0180, REQ-0190, REQ-0195]
+states: [REQ-0100, REQ-0110, REQ-0120, REQ-0130, REQ-0140, REQ-0150, REQ-0160, REQ-0170, REQ-0180, REQ-0190, REQ-0195, REQ-0105]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -40,6 +40,7 @@ It must do the following, as the requirements in force state:
 - The configuration must keep every `lazy-lock.json` entry inside the version range its plugin spec asks for. (REQ-0180)
 - The configuration must not carry a hardcoded local `dir =` override in any plugin spec. (REQ-0190)
 - A plugin must not load before the trigger its spec declares, unless another plugin that has loaded needs it. (REQ-0195; broken now, BUG-0050)
+- The configuration must work fully in a terminal, with no GUI client. (REQ-0105)
 
 What it does now:
 

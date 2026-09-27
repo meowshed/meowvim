@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0500, REQ-0510, REQ-0520, REQ-0530, REQ-0540, REQ-0550, REQ-0560, REQ-0580]
+states: [REQ-0500, REQ-0510, REQ-0520, REQ-0530, REQ-0540, REQ-0550, REQ-0560, REQ-0580, REQ-0590, REQ-0591, REQ-0592, REQ-0593]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -34,6 +34,10 @@ It must do the following, as the requirements in force state:
 - `<CR>` in the completion menu must insert a newline and never accept an item. (REQ-0550)
 - The completion popup must not swallow the key that accepts a Copilot suggestion. (REQ-0560)
 - Every mapping must run a command or function that exists. (REQ-0580; broken now, BUG-0020)
+- Leaving insert mode must work while a Cyrillic keyboard layout is active. (REQ-0590)
+- The configuration must let the user jump to any visible match by typing its label. (REQ-0591)
+- One key must toggle a terminal from both normal mode and terminal mode. (REQ-0592)
+- The completion menu must be navigable without the arrow keys. (REQ-0593)
 
 What it does now:
 

@@ -4,7 +4,7 @@ artifact: spec
 status: live
 revised: 2026-09-27
 checked-at:
-states: [REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0900, REQ-0910, REQ-0920, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0850, REQ-0970, REQ-0980]
+states: [REQ-0800, REQ-0810, REQ-0820, REQ-0830, REQ-0840, REQ-0900, REQ-0910, REQ-0920, REQ-0930, REQ-0940, REQ-0950, REQ-0960, REQ-0850, REQ-0970, REQ-0980, REQ-0990, REQ-0860, REQ-0870, REQ-0985, REQ-0986, REQ-0987]
 ---
 
 <!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
@@ -41,6 +41,12 @@ It must do the following, as the requirements in force state:
 - Every user command's description must describe what the command does. (REQ-0850; broken now, BUG-0100)
 - The test script must validate the user config file the configuration loads. (REQ-0970; broken now, BUG-0130)
 - When the user config fails validation, the test script must list the validation errors. (REQ-0980; broken now, BUG-0140)
+- The repository must keep `CLAUDE.md` and `.meowpaw/profile.toml` in version control. (REQ-0990)
+- The documentation must write the project's name as "meowvim". (REQ-0860)
+- The README must give installation commands a reader can paste as they stand. (REQ-0870)
+- An update must be reversible to the plugin versions it replaced. (REQ-0985)
+- The repository must not carry binary image files. (REQ-0986)
+- Each plugin must be configured in exactly one spec file. (REQ-0987)
 
 What it does now:
 
