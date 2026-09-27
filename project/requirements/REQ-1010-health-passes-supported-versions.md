@@ -1,0 +1,19 @@
+---
+id: REQ-1010
+artifact: requirement
+topic: diagnostics
+class: functional
+status: approved
+revised: 2026-09-27
+elaborates: []
+prompted-by: BUG-0060
+verification: behavioural
+---
+
+<!-- Written to the writing standard meow-prose ships: lead with the answer, give each rule its reason in the same sentence, and show the failing case. -->
+
+# REQ-1010
+
+The health check MUST pass the version check on every Neovim release at or above 0.12.
+
+Imposed by the owner's instruction of 2026-09-27 to approve the defects and write the specifications.
