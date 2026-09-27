@@ -47,7 +47,7 @@ up in a running Neovim, and `bin/test-config.sh` fails when one is missing.
 
 <principle name="tools_come_from_the_path">
 Find language servers, formatters and linters on `PATH` when they run, and
-install none from inside Neovim. mise replaced Mason in 66e04ea so that a
+install none from inside Neovim. mise replaced Mason in 77ffb5f so that a
 project's own `mise.toml` picks its tool versions, and a machine without a
 tool loses that one feature without an error at startup.
 </principle>
