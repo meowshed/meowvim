@@ -23,6 +23,16 @@ jobs:
       - name: Check formatting
         run: stylua --check lua/ init.lua
 
+      # The release binary is Linux x86-64 only, which is what this runner is.
+      - name: Install luacheck
+        run: |
+          wget -qO luacheck https://github.com/lunarmodules/luacheck/releases/latest/download/luacheck
+          chmod +x luacheck
+          sudo mv luacheck /usr/local/bin/
+
+      - name: Lint
+        run: luacheck lua/ init.lua
+
   test:
     name: Test on ${{ matrix.os }} with Neovim ${{ matrix.nvim-version }}
     runs-on: ${{ matrix.os }}
