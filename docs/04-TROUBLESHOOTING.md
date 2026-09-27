@@ -199,8 +199,10 @@ debug panels releases the rest.
 A buffer-local mapping that shadows a global one shows up there too. That is
 usually intended.
 
-To change a mapping, edit `lua/config/keymaps.lua`. Every mapping is declared in
-one table with its description and icon.
+To change a mapping, edit `lua/config/keymaps.lua`, which declares most of them
+with their description and icon. A plugin that loads when you press a key, or
+that replaces a built-in key such as yanky's `p`, declares that key in its own
+file under `lua/plugins/`, so search there if `keymaps.lua` doesn't have it.
 
 ## Reading the logs
 

@@ -26,8 +26,9 @@ here, and a machine that lacks one does without that feature.
 - Graceful degradation. Without a language server, document symbols come from
   treesitter, workspace symbols become a project grep, and folds fall through to
   indentation.
-- Every mapping in one table with a description and an icon, rendered by
-  which-key. `:KeymapConflicts` finds collisions.
+- Mappings with a description and an icon, rendered by which-key and kept
+  mostly in one table in `lua/config/keymaps.lua`. `:KeymapConflicts` finds
+  collisions.
 - Toggles that survive a restart: `<leader>op` writes the switches under
   `<leader>o` back to your config.
 - Startup timing kept across the last 100 runs, so you can see what a change
