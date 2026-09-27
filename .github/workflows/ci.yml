@@ -51,8 +51,7 @@ jobs:
           version: ${{ matrix.nvim-version }}
 
       # nvim-treesitter builds its parsers with the tree-sitter CLI. The macOS
-      # runner gets it from Homebrew; without it the Linux plugin install
-      # crashes.
+      # runner gets it from Homebrew; without it every Linux parser build fails.
       - name: Install ripgrep, fd and tree-sitter
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
