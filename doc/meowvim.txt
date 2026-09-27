@@ -2,7 +2,7 @@
 
 Author:  Andrew Vasilyev <me@retran.me>
 License: MIT
-Repo:    https://github.com/retran/meowvim
+Repo:    https://github.com/meowshed/meowvim
 
 ==============================================================================
 CONTENTS                                                  *meowvim-contents*
@@ -49,7 +49,7 @@ Font for the icons.
 
 Install: >
     mv ~/.config/nvim ~/.config/nvim.backup
-    git clone https://github.com/retran/meowvim.git ~/.config/nvim
+    git clone https://github.com/meowshed/meowvim.git ~/.config/nvim
     nvim
 <
 lazy.nvim bootstraps on the first run and installs the plugins. Treesitter
