@@ -186,6 +186,7 @@ in the editor is faster.
 | `<leader>gHS` | Stage Buffer | n |
 | `<leader>gHs` | Stage Hunk | n |
 | `<leader>gHv` | Preview Hunk | n |
+| `<leader>gHi` | Preview Hunk Inline | n |
 | `<leader>gn` | Neogit Status | n |
 | `<leader>gP` | Push | n |
 | `<leader>gp` | Pull | n |
@@ -316,7 +317,6 @@ The runtime toggles. `<leader>op` writes the current state of all of them into
 | `<leader>oC` | Toggle Copilot | n |
 | `<leader>oc` | Toggle Cursorline | n |
 | `<leader>od` | Toggle Dim Background | n |
-| `<leader>oD` | Toggle Deleted Lines | n |
 | `<leader>oe` | Toggle Signcolumn | n |
 | `<leader>of` | Toggle Format on Save | n |
 | `<leader>og` | Toggle Indent Guides | n |

@@ -68,7 +68,6 @@ M.schema = {
   git = {
     enable_signs = { type = "boolean", default = true },
     blame_line = { type = "boolean", default = false },
-    show_deleted = { type = "boolean", default = true },
     lazygit_theme_sync = { type = "boolean", default = true },
   },
 
