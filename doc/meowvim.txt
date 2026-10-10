@@ -85,7 +85,7 @@ Sections and the options each one holds:
                 .update_in_insert
     formatting  formatters, timeout_ms
     linting     auto_lint, linters
-    git         enable_signs, blame_line, show_deleted, lazygit_theme_sync
+    git         enable_signs, blame_line, lazygit_theme_sync
     sessions    auto_save, auto_restore, per_branch
     snacks      image_preview, scope_highlighting, custom_styles,
                 dashboard.show_projects
@@ -265,7 +265,7 @@ The runtime switches under `<leader>o`:
     <leader>on  line number mode     <leader>oc  cursorline
     <leader>ol  whitespace           <leader>oh  search highlight
     <leader>oe  sign column          <leader>og  indent guides
-    <leader>od  dim inactive         <leader>oD  deleted lines
+    <leader>od  dim inactive
     <leader>ox  diagnostics          <leader>oi  inlay hints
     <leader>ot  linting              <leader>of  format on save
     <leader>oa  auto-save            <leader>oC  Copilot

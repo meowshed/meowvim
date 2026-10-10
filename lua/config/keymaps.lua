@@ -175,7 +175,6 @@ local ICON_EXACT = {
   ["Toggle Auto Save"] = "󰆓",
   ["Toggle Cursorline"] = "󰄯",
   ["Toggle Diagnostics"] = "󰒡",
-  ["Toggle Deleted Lines"] = "󰈈",
   ["Toggle Dim Background"] = "󰓃",
   ["Toggle File Explorer"] = "󰙅",
   ["Toggle Format on Save"] = "󰉵",
@@ -890,6 +889,7 @@ function M.setup()
       { "<leader>gHS", gitsigns_action("stage_buffer"), desc = "Stage Buffer" },
       { "<leader>gHR", gitsigns_action("reset_buffer"), desc = "Reset Buffer" },
       { "<leader>gHv", gitsigns_action("preview_hunk"), desc = "Preview Hunk" },
+      { "<leader>gHi", gitsigns_action("preview_hunk_inline"), desc = "Preview Hunk Inline" },
       { "<leader>gHd", gitsigns_action("diffthis"), desc = "Diff Buffer" },
       {
         "]h",
@@ -1355,18 +1355,6 @@ function M.setup()
       },
       { "<leader>oa", ":AutoSaveToggle<CR>", desc = "Toggle Auto Save" },
       { "<leader>of", ":FormatToggle<CR>", desc = "Toggle Format on Save" },
-      {
-        "<leader>oD",
-        function()
-          vim.g.git_show_deleted = not vim.g.git_show_deleted
-          toggles.update("git_show_deleted")
-          require("gitsigns").toggle_deleted(vim.g.git_show_deleted)
-          local state = vim.g.git_show_deleted and "ON" or "OFF"
-          local level = vim.g.git_show_deleted and vim.log.levels.INFO or vim.log.levels.WARN
-          vim.notify("Deleted lines: " .. state, level)
-        end,
-        desc = "Toggle Deleted Lines",
-      },
       {
         "<leader>od",
         function()

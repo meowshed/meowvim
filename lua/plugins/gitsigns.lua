@@ -13,9 +13,6 @@ return {
 
     return {
       signcolumn = git.enable_signs ~= false,
-      -- utils.toggles seeds vim.g.git_show_deleted from git.show_deleted before
-      -- lazy loads anything, and <leader>oD flips it afterwards.
-      show_deleted = vim.g.git_show_deleted == true,
       current_line_blame = git.blame_line == true,
       current_line_blame_opts = {
         virt_text = true,
