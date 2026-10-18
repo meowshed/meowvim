@@ -119,6 +119,16 @@ return {
           python = { analysis = { typeCheckingMode = "basic" } },
         },
       },
+      csharp_ls = {
+        -- The metadata-uris feature makes csharp-ls return decompiled sources for definitions
+        -- outside the solution; csharpls-extended-lsp.nvim opens them as buffers.
+        cmd = { "csharp-ls", "--features", "metadata-uris" },
+        on_attach = function(client, bufnr)
+          -- csharp-ls doesn't advertise semantic tokens, but Neovim 0.12 turns the highlighter on
+          -- for every client, and its response handler then indexes a nil provider.
+          vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr, client_id = client.id })
+        end,
+      },
       ts_ls = {
         -- <leader>co is mapped globally in lua/config/keymaps.lua and checks the
         -- filetype itself, so no buffer-local mapping is needed here.
