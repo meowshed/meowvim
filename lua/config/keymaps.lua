@@ -1742,6 +1742,27 @@ function M.setup()
   vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit Insert Mode" })
   vim.keymap.set("i", "оо", "<Esc>", { desc = "Exit Insert Mode" })
 
+  -- q<leader> means q was pressed by mistake: start no recording and run <leader> as usual.
+  -- Any other register records as Vim does, and q during a recording stops it.
+  -- An expr mapping, so the q that stops a recording is Vim's own q: Vim then strips it, and
+  -- the keys of the last command, from the register exactly as it does without this mapping.
+  vim.keymap.set("n", "q", function()
+    if vim.fn.reg_recording() ~= "" then
+      return "q"
+    end
+    local ok, char = pcall(vim.fn.getcharstr)
+    if not ok or char == "\27" then
+      return ""
+    end
+    if char == vim.g.mapleader then
+      -- The returned keys are not remapped, so <leader> goes through feedkeys to reach
+      -- which-key's trigger; "i" puts it ahead of anything typed after it.
+      vim.api.nvim_feedkeys(char, "imt", false)
+      return ""
+    end
+    return "q" .. char
+  end, { expr = true, desc = "Record Macro" })
+
   -- Normal-mode Tab: cycle buffers.
   vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next Buffer", silent = true })
   vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous Buffer", silent = true })

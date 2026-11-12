@@ -84,7 +84,20 @@ local function build_opts()
     winbar = winbar_section,
     inactive_winbar = winbar_section,
     sections = {
-      lualine_a = { "mode" },
+      lualine_a = {
+        "mode",
+        -- noice hides Neovim's own "recording @q" message, and which-key removes its <Space>
+        -- trigger while a macro records, so a stray q<letter> silently breaks <leader> maps.
+        {
+          function()
+            return (icons_enabled and "󰑋 " or "@") .. vim.fn.reg_recording()
+          end,
+          cond = function()
+            return vim.fn.reg_recording() ~= ""
+          end,
+          color = { fg = colors.orange, gui = "bold" },
+        },
+      },
       lualine_b = {},
       lualine_c = {
         "branch",
@@ -161,6 +174,20 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     if package.loaded["lualine"] then
       require("lualine").setup(build_opts())
     end
+  end,
+})
+
+-- The statusline refreshes once a second; redraw at once so the recording indicator
+-- appears with the first keystroke. RecordingLeave fires before the register clears,
+-- hence the schedule.
+vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
+  group = vim.api.nvim_create_augroup("meowvim-lualine-recording", { clear = true }),
+  callback = function()
+    vim.schedule(function()
+      if package.loaded["lualine"] then
+        require("lualine").refresh({ place = { "statusline" } })
+      end
+    end)
   end,
 })
 
