@@ -77,10 +77,6 @@ opt.clipboard:append("unnamedplus")
 opt.mouse = "a"
 opt.mousefocus = false
 
--- Folding configuration (overridden by nvim-ufo plugin when loaded)
--- Defaults to built-in treesitter folding as fallback
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldcolumn = "1"
 opt.foldenable = true
 opt.foldlevel = 99

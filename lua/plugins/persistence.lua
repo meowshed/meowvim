@@ -41,17 +41,40 @@ return {
     local config_ok, config = pcall(require, "meowvim.config")
     local auto_save = not config_ok or config.get("sessions.auto_save", true) ~= false
 
-    if auto_save then
-      vim.api.nvim_create_autocmd("DirChanged", {
-        group = vim.api.nvim_create_augroup("PersistenceAutoSave", { clear = true }),
-        pattern = "*",
-        callback = function()
-          -- Small delay to ensure the directory change is complete
-          vim.defer_fn(function()
-            require("persistence").save()
-          end, 100)
-        end,
-      })
+    if not auto_save then
+      -- setup() starts persistence, which saves on VimLeavePre; stopping it is
+      -- the only way to turn that save off.
+      require("persistence").stop()
+      return
     end
+
+    -- persistence names the session file from getcwd(), so the save has to
+    -- run before :cd, while the cwd still belongs to the session being left;
+    -- after it, the old buffers would land in the new directory's session.
+    vim.api.nvim_create_autocmd("DirChangedPre", {
+      group = vim.api.nvim_create_augroup("PersistenceAutoSave", { clear = true }),
+      pattern = "global",
+      callback = function()
+        local persistence = require("persistence")
+        -- persistence.stop(), which <leader>qd calls, turns this save off too.
+        if not persistence.active() then
+          return
+        end
+        -- Like persistence's own `need = 1` check on exit, and a little stricter
+        -- because it also requires buflisted: skip the save when no file
+        -- buffer is open, so an empty editor never overwrites a useful
+        -- session. save() fires no PersistenceSavePre/Post; nothing here
+        -- listens for them.
+        local has_file = vim.iter(vim.api.nvim_list_bufs()):any(function(buf)
+          return vim.bo[buf].buflisted
+            and vim.bo[buf].buftype == ""
+            and not vim.tbl_contains({ "gitcommit", "gitrebase", "jj" }, vim.bo[buf].filetype)
+            and vim.api.nvim_buf_get_name(buf) ~= ""
+        end)
+        if has_file then
+          persistence.save()
+        end
+      end,
+    })
   end,
 }

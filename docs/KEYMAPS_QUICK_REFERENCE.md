@@ -82,6 +82,7 @@ from inside Neovim.
 | Key | Action |
 | --- | --- |
 | `<C-h>` `<C-j>` `<C-k>` `<C-l>` | Move between windows and tmux panes |
+| `<C-\>` | Back to the previous window or tmux pane |
 | `<leader>ws` / `<leader>wv` | Split below / right |
 | `<leader>wc` / `<leader>wo` | Close this / all others |
 | `<leader>wt` / `<leader>wT` | New / close tab |

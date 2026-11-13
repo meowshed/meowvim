@@ -6,14 +6,15 @@
 
 return {
   "folke/which-key.nvim",
-  event = "VeryLazy",
+  -- lua/config/keymaps.lua requires which-key while init.lua runs, so VeryLazy would
+  -- never apply.
+  lazy = false,
   config = function()
     require("which-key").setup({
       preset = "helix",
-      sort = { "local", "manual", "group", "alphanum" },
+      -- "order" keeps the registers and marks popups in the order the plugin gives them.
+      sort = { "local", "order", "manual", "group", "alphanum" },
       icons = {
-        breadcrumb = "»",
-        separator = "➜",
         group = "",
       },
     })

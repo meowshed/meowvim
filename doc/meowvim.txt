@@ -21,7 +21,7 @@ CONTENTS                                                  *meowvim-contents*
 ==============================================================================
 1. INTRODUCTION                                       *meowvim* *meowvim-introduction*
 
-meowvim is a Neovim configuration for Neovim 0.12 or later. It loads 17
+meowvim is a Neovim configuration for Neovim 0.12 or later. It loads 15
 plugins at startup and installs the rest on demand.
 
 Your settings live in one Lua table at `~/.config/meowvim/config.lua`. The
@@ -87,8 +87,7 @@ Sections and the options each one holds:
     linting     auto_lint, linters
     git         enable_signs, blame_line, lazygit_theme_sync
     sessions    auto_save, auto_restore, per_branch
-    snacks      image_preview, scope_highlighting, custom_styles,
-                dashboard.show_projects
+    snacks      image_preview, custom_styles, dashboard.show_projects
     toggles     the runtime switches under <leader>o
     plugins     free-form table for your own plugin settings
     custom      free-form table for anything else

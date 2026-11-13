@@ -52,7 +52,6 @@ local WINBAR_EXCLUDED = {
   "snacks_picker_input",
   "snacks_picker_list",
   "snacks_terminal",
-  "toggleterm",
 }
 
 local function build_opts()
@@ -64,20 +63,12 @@ local function build_opts()
   local winbar_section = show_winbar and { lualine_c = { { "filename", path = 1 } } } or {}
 
   return {
+    -- globalstatus follows 'laststatus', which lua/config/options.lua sets to 3.
     options = {
-      theme = "auto",
       icons_enabled = icons_enabled,
       component_separators = { left = "|", right = "|" },
       section_separators = { left = "", right = "" },
-      ignore_focus = {},
-      refresh = {
-        statusline = 1000,
-        winbar = 1000,
-      },
-      always_divide_middle = true,
-      globalstatus = true,
       disabled_filetypes = {
-        statusline = {},
         winbar = WINBAR_EXCLUDED,
       },
     },
@@ -105,6 +96,12 @@ local function build_opts()
         { "filename", path = 1 },
       },
       lualine_x = {
+        -- lazy.nvim's checker looks for updates with notify = false, so this is the only
+        -- place its result shows.
+        {
+          require("lazy.status").updates,
+          cond = require("lazy.status").has_updates,
+        },
         "diagnostics",
         {
           "copilot",
@@ -125,11 +122,12 @@ local function build_opts()
                 unknown = colors.red,
               },
             },
-            spinners = "dots",
+            -- The component counts frames with #spinners, so a preset name like "dots"
+            -- cycles through only as many frames as the name has letters.
+            spinners = require("copilot-lualine.spinners").dots,
             spinner_color = colors.blue,
           },
           show_colors = true,
-          show_loading = true,
         },
         "filetype",
         "encoding",
@@ -148,21 +146,12 @@ local function build_opts()
         "location",
       },
     },
-    inactive_sections = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = { { "filename", path = 1 } },
-      lualine_x = { "progress", "location" },
-      lualine_y = {},
-      lualine_z = {},
-    },
     extensions = {
       "lazy",
       "man",
       "nvim-dap-ui",
       "overseer",
       "quickfix",
-      "toggleterm",
     },
   }
 end
@@ -196,7 +185,7 @@ return {
   lazy = false,
   priority = 1000,
   dependencies = {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     "AndreM222/copilot-lualine",
   },
   opts = build_opts,

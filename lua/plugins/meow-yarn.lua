@@ -7,10 +7,8 @@
 return {
   -- dir = "/Users/retran/workspace/meow.yarn.nvim", -- local dev override
   "retran/meow.yarn.nvim",
-  -- Pulled in by require() from the <leader>n hierarchy keymaps.
-  lazy = true,
+  -- Pulled in by require() from the <leader>n hierarchy keymaps, or by
+  -- :MeowYarn typed directly.
+  cmd = "MeowYarn",
   dependencies = { "MunifTanjim/nui.nvim" },
-  config = function()
-    require("meow.yarn").setup({})
-  end,
 }

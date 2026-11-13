@@ -1,8 +1,8 @@
 ---
 id: ADR-0150
 artifact: adr
-status: approved
-revised: 2026-09-27
+status: superseded
+revised: 2026-11-19
 addresses: [REQ-0420]
 supersedes: []
 ---

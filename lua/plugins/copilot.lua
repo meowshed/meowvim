@@ -17,27 +17,49 @@ return {
   cmd = "Copilot",
   event = "InsertEnter",
   opts = {
+    -- The panel maps <M-CR> globally, and nothing here opens it.
+    panel = { enabled = false },
     suggestion = {
-      enabled = true,
       auto_trigger = true,
-      hide_during_completion = true,
+      -- blink-cmp.lua drives accept and dismiss through copilot.suggestion.
       keymap = {
         accept = false,
-        accept_word = false,
-        accept_line = false,
         next = false,
         prev = false,
         dismiss = false,
-        toggle_auto_trigger = false,
       },
     },
     server = {
-      type = "binary",
       custom_server_filepath = "copilot-language-server",
     },
   },
   config = function(_, opts)
     require("copilot").setup(opts)
+
+    -- `hide_during_completion` checks only pumvisible(), which blink's menu
+    -- never sets, so ghost text would draw over the menu. blink announces its
+    -- menu through User events instead. copilot reads the flag only when it
+    -- redraws, so redraw at once: otherwise ghost text already on screen stays
+    -- over the menu, and a hidden one returns only on the next keystroke.
+    local group = vim.api.nvim_create_augroup("meowvim-copilot-blink", { clear = true })
+    local function set_hidden(hidden)
+      vim.b.copilot_suggestion_hidden = hidden
+      pcall(require("copilot.suggestion").update_preview)
+    end
+    vim.api.nvim_create_autocmd("User", {
+      group = group,
+      pattern = "BlinkCmpMenuOpen",
+      callback = function()
+        set_hidden(true)
+      end,
+    })
+    vim.api.nvim_create_autocmd("User", {
+      group = group,
+      pattern = "BlinkCmpMenuClose",
+      callback = function()
+        set_hidden(false)
+      end,
+    })
 
     -- The plugin loads on InsertEnter regardless of the user config, so honour
     -- `toggles.copilot` / `core.enable_copilot` here. Without this Copilot kept

@@ -79,7 +79,6 @@ M.schema = {
 
   snacks = {
     image_preview = { type = "boolean", default = true },
-    scope_highlighting = { type = "boolean", default = true },
     custom_styles = { type = "boolean", default = true },
     dashboard = { type = "table" },
   },

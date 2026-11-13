@@ -5,8 +5,7 @@
 -- @brief: Minimal indent guides with animation-free rendering.
 
 return {
-  "echasnovski/mini.indentscope",
-  version = false,
+  "nvim-mini/mini.indentscope",
   event = { "BufReadPre", "BufNewFile" },
   config = function()
     local toggles = require("utils.toggles")
@@ -44,7 +43,6 @@ return {
         "snacks_picker_input",
         "snacks_picker_list",
         "snacks_terminal",
-        "toggleterm",
       },
       callback = function()
         vim.b.miniindentscope_disable = true

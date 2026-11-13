@@ -24,7 +24,8 @@ for name, theme in pairs(themes.themes) do
     theme.repo,
     name = theme.name,
     dependencies = theme.dependencies,
-    priority = 1000,
+    -- Priority only orders startup plugins, so only the active theme needs it.
+    priority = name == active_theme and 1000 or nil,
     lazy = name ~= active_theme,
   }
 

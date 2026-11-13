@@ -89,7 +89,6 @@ M.defaults = {
 
   snacks = {
     image_preview = true,
-    scope_highlighting = true,
     custom_styles = true,
     dashboard = {
       show_projects = 8,

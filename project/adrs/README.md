@@ -2,7 +2,7 @@
 
 <!-- meow-flow index -->
 
-77 decisions in all: 54 approved, 23 superseded.
+83 decisions in all: 59 approved, 24 superseded.
 
 | Identifier | What it concluded | Status |
 | --- | --- | --- |
@@ -20,7 +20,7 @@
 | [ADR-0120](ADR-0120-neovim-s-built-in-gr-mappings-stay.md) | Neovim's built-in gr mappings stay | approved |
 | [ADR-0130](ADR-0130-the-update-restore-point-is-the-lock-file.md) | The update restore point is the lock file | approved |
 | [ADR-0140](ADR-0140-true-colour-turns-on-only-when-the-terminal-advertises-it.md) | True colour turns on only when the terminal advertises it | approved |
-| [ADR-0150](ADR-0150-the-lazygit-theme-lives-in-a-file-meowvim-owns.md) | The lazygit theme lives in a file meowvim owns | approved |
+| [ADR-0150](ADR-0150-the-lazygit-theme-lives-in-a-file-meowvim-owns.md) | The lazygit theme lives in a file meowvim owns | superseded |
 | [ADR-0160](ADR-0160-auto-save-and-format-on-save-read-the-editor-keys.md) | Auto-save and format-on-save read the editor keys | approved |
 | [ADR-0170](ADR-0170-every-theme-is-installed-and-only-the-active-one-loads.md) | Every theme is installed and only the active one loads | approved |
 | [ADR-0180](ADR-0180-large-buffers-format-after-the-write.md) | Large buffers format after the write | approved |
@@ -83,4 +83,10 @@
 | [ADR-0950](ADR-0950-the-readme-has-no-usage-examples-section.md) | The README has no usage-examples section | approved |
 | [ADR-0960](ADR-0960-the-readme-doesn-t-explain-installing-dependencies.md) | The README doesn't explain installing dependencies | approved |
 | [ADR-0970](ADR-0970-the-readme-credits-lazyvim-and-spacemacs.md) | The README credits LazyVim and spacemacs | superseded |
+| [ADR-0980](ADR-0980-y-keeps-vim-s-own-cursor-movement.md) | `y` keeps Vim's own cursor movement | approved |
+| [ADR-0990](ADR-0990-snacks-nvim-runs-lazygit-and-themes-it.md) | snacks.nvim runs lazygit and themes it | approved |
+| [ADR-1000](ADR-1000-which-key-is-patched-to-stay-on-while-a-macro-records.md) | which-key is patched to stay on while a macro records | approved |
+| [ADR-1010](ADR-1010-noice-hides-write-messages-by-their-text.md) | noice hides write messages by their text | approved |
+| [ADR-1020](ADR-1020-zr-and-zm-step-one-fold-level-under-ufo.md) | `zr` and `zm` step one fold level under ufo | approved |
+| [ADR-1030](ADR-1030-auto-save-writes-only-the-current-buffer.md) | auto-save writes only the current buffer | approved |
 <!-- /meow-flow index -->

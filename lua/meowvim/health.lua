@@ -254,25 +254,28 @@ local function check_external_deps()
     local lg_version = vim.fn.system("lazygit --version"):match("version=([^,]+)")
     ok("lazygit: " .. (lg_version or "installed"))
   else
-    info("lazygit not found - :LazyGit command will not work")
+    info("lazygit not found - <leader>gg and <leader>gf will not work")
     info("Install from: https://github.com/jesseduffield/lazygit")
   end
 
-  -- Check node (for Copilot)
-  local node_output = vim.fn.executable("node") == 1 and vim.fn.system("node --version") or nil
-  local node_failed = vim.v.shell_error ~= 0
-  if node_output and not node_failed then
-    ok("node: " .. vim.trim(node_output))
-  elseif node_output then
+  -- Check copilot-language-server (for Copilot). copilot.lua runs the
+  -- standalone binary, so Copilot does not need node.
+  local copilot_server = "copilot-language-server"
+  local copilot_output = vim.fn.executable(copilot_server) == 1 and vim.fn.system({ copilot_server, "--version" })
+    or nil
+  local copilot_failed = vim.v.shell_error ~= 0
+  if copilot_output and not copilot_failed then
+    ok(copilot_server .. ": " .. vim.trim(copilot_output))
+  elseif copilot_output then
     -- Present on PATH but not runnable, e.g. a mise shim with no version set.
-    warn("node found but not runnable: " .. vim.trim(vim.split(node_output, "\n")[1] or ""))
+    warn(copilot_server .. " found but not runnable: " .. vim.trim(vim.split(copilot_output, "\n")[1] or ""))
   else
     local config_ok, config = pcall(require, "meowvim.config")
     if config_ok and config.get("core.enable_copilot", false) then
-      error("node is required for GitHub Copilot")
-      info("Install from: https://nodejs.org/")
+      error(copilot_server .. " is required for GitHub Copilot")
+      info("Install with: mise use -g aqua:github/copilot-language-server-release")
     else
-      info("node not found (not needed unless using Copilot)")
+      info(copilot_server .. " not found (not needed unless using Copilot)")
     end
   end
 end

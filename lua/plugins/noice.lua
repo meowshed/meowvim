@@ -19,12 +19,9 @@ return {
         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
         ["vim.lsp.util.stylize_markdown"] = true,
       },
-      progress = {
-        enabled = true,
-        format = "lsp_progress",
-        format_done = "lsp_progress_done",
-        throttle = 1000 / 10,
-        view = "mini",
+      -- blink.cmp shows signature help, and two windows would open on `(` and `,`.
+      signature = {
+        enabled = false,
       },
     },
     presets = {
@@ -36,7 +33,17 @@ return {
     },
     routes = {
       {
-        filter = { event = "msg_show", find = "written" },
+        -- Hide the message :write prints. Neovim 0.12 sends it as two "progress"
+        -- messages with the id "bufwrite": `"file" ` and then
+        -- `"file" [New] 2L, 4B written`. noice can't filter on the id, and the
+        -- kind alone would also hide Neogit's push and fetch spinner and
+        -- :checkhealth's progress line, so match both texts as well.
+        filter = {
+          any = {
+            { event = "msg_show", kind = "progress", find = '^".*" $' },
+            { event = "msg_show", kind = "progress", find = "%d+B written$" },
+          },
+        },
         opts = { skip = true },
       },
     },

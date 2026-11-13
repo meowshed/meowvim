@@ -12,26 +12,6 @@ return {
   event = "VeryLazy",
   opts = {
     labels = "asdfghjklqwertyuiopzxcvbnm1234567890",
-    search = {
-      multi_window = true,
-      mode = "exact",
-    },
-    jump = {
-      autojump = false,
-    },
-    label = {
-      uppercase = true,
-      after = true,
-      before = false,
-      style = "overlay",
-      reuse = "lowercase",
-      distance = true,
-      min_pattern_length = 0,
-    },
-    highlight = {
-      backdrop = true,
-      matches = true,
-    },
     modes = {
       search = {
         enabled = true,
@@ -50,9 +30,6 @@ return {
         jump_labels = false,
         search = {
           wrap = false,
-          multi_window = false,
-          -- 2-char jump behaviour while preserving ; and , repeat
-          max_length = 2,
         },
         highlight = { backdrop = true },
         jump = {
@@ -66,20 +43,6 @@ return {
         -- Hide match highlights immediately after the jump; ;/, still repeat.
         autohide = true,
       },
-      treesitter = {
-        labels = "abcdefghijklmnopqrstuvwxyz",
-        jump = { pos = "range" },
-        search = { incremental = false },
-        label = { before = true, after = true, style = "inline" },
-        highlight = {
-          backdrop = false,
-          matches = false,
-        },
-      },
-    },
-    prompt = {
-      enabled = true,
-      prefix = { { "⚡", "FlashPromptIcon" } },
     },
   },
 }

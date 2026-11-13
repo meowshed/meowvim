@@ -8,9 +8,18 @@ return {
   "nvim-treesitter/nvim-treesitter-textobjects",
   branch = "main",
   event = { "BufReadPre", "BufNewFile" },
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-  },
+  init = function()
+    -- These ftplugins map ]] [[ buffer-locally (python and go also ][ [],
+    -- python also ]m [m ]M [M), which shadows the treesitter motions below.
+    -- The guard has to be set
+    -- before the first ftplugin runs, so it lives in init rather than config.
+    -- sql.vim ignores it, so after/ftplugin/sql.lua removes those maps instead.
+    -- gdscript.vim checks only g:no_plugin_maps, so its ]] and [[ survive the
+    -- guard; the entry stays for when the runtime file starts honouring it.
+    for _, ft in ipairs({ "python", "rust", "go", "gdscript", "sql" }) do
+      vim.g["no_" .. ft .. "_maps"] = true
+    end
+  end,
   config = function()
     require("nvim-treesitter-textobjects").setup({
       select = {
@@ -21,9 +30,6 @@ return {
         include_surrounding_whitespace = function(opts)
           return opts.query_string:match("outer") ~= nil
         end,
-      },
-      move = {
-        set_jumps = true,
       },
     })
 

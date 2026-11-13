@@ -6,11 +6,10 @@
 --
 -- Replaced ultimate-autopair (broken with Neovim 0.12.3) with mini.pairs.
 -- Tabout and fastwarp features from ultimate-autopair are not available in
--- mini.pairs — use <C-f> to jump past closing bracket if needed.
+-- mini.pairs — type the closing bracket to step over it.
 
 return {
-  "echasnovski/mini.pairs",
-  version = false,
+  "nvim-mini/mini.pairs",
   event = { "InsertEnter", "CmdlineEnter" },
   opts = {
     -- Only `command = true` differs from the defaults; the explicit `mappings`
@@ -19,7 +18,4 @@ return {
     -- always-two-character neighbourhood mini.pairs matches against).
     modes = { insert = true, command = true, terminal = false },
   },
-  config = function(_, opts)
-    require("mini.pairs").setup(opts)
-  end,
 }

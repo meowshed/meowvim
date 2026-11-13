@@ -9,24 +9,17 @@ return {
   version = "v2.*", -- Pin to stable 2.x releases
   priority = 1000,
   lazy = false,
-  config = function(_, opts)
-    require("snacks").setup(opts)
-    local patches = require("utils.patches")
-    if type(patches.patch_snacks_picker) == "function" then
-      patches.patch_snacks_picker()
-    end
-  end,
   opts = function()
     local config_ok, config = pcall(require, "meowvim.config")
     local image_preview = true
-    local scope_highlighting = true
+    local lazygit_theme_sync = true
     local custom_styles = true
     local startup_dashboard = true
     local project_limit = 8
 
     if config_ok then
       image_preview = config.get("snacks.image_preview", true)
-      scope_highlighting = config.get("snacks.scope_highlighting", true)
+      lazygit_theme_sync = config.get("git.lazygit_theme_sync", true)
       custom_styles = config.get("snacks.custom_styles", true)
       startup_dashboard = config.get("performance.startup_dashboard", true)
       project_limit = config.get("snacks.dashboard.show_projects", project_limit)
@@ -64,13 +57,17 @@ return {
 
       bigfile = {},
       dim = {},
-      explorer = {
-        replace_netrw = true,
-      },
+      explorer = {},
       -- GitHub CLI integration: gh_pr / gh_issue / gh_diff / gh_actions pickers.
       -- Replaces gh.nvim + litee.nvim; requires the `gh` binary.
       gh = {},
       input = {},
+      -- `configure` writes a lazygit theme from the active colorscheme and layers it
+      -- over lazygit's own config through LG_CONFIG_FILE. It also points lazygit's
+      -- editor at this Neovim, so turning the theme sync off turns that off too.
+      lazygit = {
+        configure = lazygit_theme_sync,
+      },
       notifier = {},
       -- Renders the file before plugins load when opening `nvim <file>`.
       quickfile = {},
@@ -80,29 +77,23 @@ return {
       image = {
         enabled = image_preview,
       },
-      scope = {
-        enabled = scope_highlighting,
-        treesitter = {
-          enabled = true,
-        },
-      },
+      -- No `scope` module: mini.indentscope draws the scope and owns ii, ai, [i, and ]i,
+      -- and snacks.scope would map the same keys. snacks.dim calls the scope API
+      -- directly, so it works without the module.
       scratch = {
         ft = "markdown",
         filekey = {
-          cwd = true,
           branch = false,
-          count = true,
         },
       },
-      styles = {
-        enabled = custom_styles,
+      -- snacks has no switch for styles, so leave the table out to keep its defaults.
+      styles = custom_styles and {
         notification = {
           wo = {
             winblend = 0,
-            wrap = false,
           },
         },
-      },
+      } or nil,
 
       picker = {
         hidden = true,
@@ -111,25 +102,18 @@ return {
           files = {
             hidden = true,
           },
-          git_files = {
-            hidden = true,
-          },
-          recent = {
-            hidden = true,
-          },
           explorer = {
             layout = {
-              position = "right",
+              layout = {
+                position = "right",
+              },
             },
-            hidden = true,
-            follow_file = true,
             auto_close = true,
             jump = {
               close = true,
             },
           },
           projects = {
-            hidden = true,
             dev = {
               "~/workspace",
               "~/dev",
@@ -143,7 +127,8 @@ return {
               end
               return {}
             end)(),
-            -- Only scan for git repos in dev dirs, configured projects are always shown first
+            -- Only scan for git repos in dev dirs. Configured projects are listed with the
+            -- rest and sorted by frecency, like any other project.
             patterns = { ".git" },
             recent = true,
             confirm = function(picker, item)

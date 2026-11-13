@@ -64,6 +64,15 @@ one.
 | `<leader>sr` | Search and Replace | n,x |
 | `<leader>st` | List TODO Comments | n |
 
+Spectre's panel keeps its own keys after the leader key, and meowvim moves the
+ones that clashed to uppercase so the global Quit, Code, Options, and Review
+groups still work in the panel. Press the leader key, then `Q` to send the
+results to the quickfix list, `C` to type a replace command, `O` for the
+options, `I` to replace the item under the cursor, `R` to replace all, `P` to
+pick a template, and `D` to delete the line. When GNU sed is installed as
+`gsed`, Spectre replaces with `gsed -i -E`, because the BSD sed on macOS reads
+`+`, `|`, and `\d` differently from ripgrep and leaves those matches unreplaced.
+
 ## Jump
 
 flash.nvim labels the visible targets and jumps to the one you type.
@@ -82,7 +91,8 @@ pressing the motion key again advances to the next match.
 ## Windows
 
 Splits, focus, size, and tabs. `<C-h>`, `<C-j>`, `<C-k>`, and `<C-l>` move
-between windows and tmux panes alike.
+between windows and tmux panes alike, and `<C-\>` goes back to the previous
+one.
 
 | Key | Action | Modes |
 | --- | --- | --- |
@@ -120,6 +130,7 @@ meow.yarn trees.
 | `<leader>nd` | Navigate to Definition | n |
 | `<leader>nH` | Type Hierarchy (Super) | n |
 | `<leader>nh` | Type Hierarchy (Subtypes) | n |
+| `<leader>nl` | Reopen Last Hierarchy | n |
 | `<leader>ni` | Implementation | n |
 | `<leader>nr` | Reference | n |
 | `<leader>nS` | Go To Workspace Symbols | n |
@@ -130,6 +141,9 @@ meow.yarn trees.
 | `<leader>nWR` | Remove Workspace Folder | n |
 
 `]w` and `[w` move between references of the symbol under the cursor.
+`:MeowYarn type super`, `:MeowYarn type sub`, `:MeowYarn call callers`,
+`:MeowYarn call callees`, and `:MeowYarn last` open the same trees without a
+key.
 
 ## Code
 
@@ -149,14 +163,16 @@ and Rust crates.
 | `<leader>cd` | Project Diagnostics | n |
 | `<leader>cf` | Format Buffer | n |
 | `<leader>ch` | Line Diagnostics | n |
-| `<leader>cL` | Refresh CodeLens | n |
+| `<leader>cL` | Toggle CodeLens | n |
 | `<leader>cl` | Run CodeLens | n |
 | `<leader>co` | Organize Imports | n |
 | `<leader>cq` | Quickfix List | n |
 | `<leader>cR` | Rename File | n |
 
-`<leader>cr` renames the symbol with a live preview, and `<leader>cs` takes a
-code screenshot in visual mode when silicon is installed.
+`<leader>cr` renames the symbol with a live preview. In visual mode,
+`<leader>cs` takes a code screenshot. The mapping and the Silicon command exist
+only when the `silicon` binary is on your PATH, so without it the keys do
+nothing.
 
 ## Git
 
@@ -209,7 +225,8 @@ pull request opens approve, review, merge, checkout, and diff.
 ## Tests
 
 neotest runs the suite for the current file, the nearest test, or everything.
-The adapters cover Go, Python, Jest, and Vitest, and `<leader>td` runs the
+The adapters cover Go, Python, Jest, Vitest, Rust through rustaceanvim, and C#
+through neotest-vstest, and `<leader>td` runs the
 nearest test under the debugger.
 
 | Key | Action | Modes |
@@ -387,7 +404,7 @@ accept key you need.
 | `<C-u>` / `<C-d>` | Scroll the documentation |
 | `<Tab>` / `<S-Tab>` | Move between snippet placeholders |
 | `<CR>` | Newline; it never accepts |
-| `<Esc>` | Dismiss the Copilot suggestion, else close the menu and leave insert |
+| `<Esc>` | Dismiss the Copilot suggestion and close the menu, staying in insert; with neither open, leave insert |
 
 `jj` also leaves insert mode, and so does the Russian `oo`, for a keyboard
 layout you did not mean to be in.
@@ -403,11 +420,19 @@ Treesitter textobjects, in visual and operator-pending mode.
 | `aa` / `ia` | A parameter |
 | `al` / `il` | A loop |
 
-Movement between them uses `]m` and `[m` for functions and `]]` and `[[` for
-classes, with the uppercase forms landing on the end instead of the start.
+mini.indentscope adds `ii` and `ai` for the indent scope under the cursor,
+without and with its border lines, and `[i` and `]i` jump to the scope's top and
+bottom.
+
+Movement between them uses `]m` and `[m` for the start of a function and `]M`
+and `[M` for its end. For classes, `]]` and `[[` go to the start and `][` and
+`[]` to the end. The motions work in Python, Rust, Go, GDScript, and SQL too,
+because meowvim turns off the section maps those filetypes' own ftplugins
+define. Markdown keeps its heading motions on `]]` and `[[`.
 
 `gs` surrounds: `gsa` adds, `gsd` deletes, `gsr` replaces, `gsf` and `gsF` find,
-and `gsh` highlights. `gc` and `gC` comment.
+`gsh` highlights, and `gsn` sets how many lines around the cursor a surround
+search covers. `gc` and `gC` comment.
 
 ## Folds
 
@@ -417,6 +442,8 @@ treesitter, then indentation.
 | Key | Action |
 | --- | --- |
 | `zR` / `zM` | Open or close every fold |
+| `zr` | Open every fold except the kinds ufo keeps closed; meowvim lists none, so it opens all |
+| `zm` | Close folds to the level given as a count: `zm` closes all, `2zm` keeps two levels open |
 | `zp` | Peek at the folded lines under the cursor |
 
 ## Terminal

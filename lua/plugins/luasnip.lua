@@ -16,6 +16,12 @@ return {
   build = "rm -f deps/luasnip-jsregexp.so && make install_jsregexp",
   dependencies = { "rafamadriz/friendly-snippets" },
   config = function()
+    -- Both checks are off by default, so <Tab> would jump back into a snippet
+    -- you left before its last tabstop, or into one whose text you deleted.
+    require("luasnip").setup({
+      region_check_events = "InsertEnter",
+      delete_check_events = "TextChanged",
+    })
     require("luasnip.loaders.from_vscode").lazy_load()
   end,
 }

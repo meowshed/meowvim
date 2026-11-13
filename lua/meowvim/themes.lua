@@ -232,9 +232,11 @@ M.themes = {
       "rosebones",
     },
     apply = function(variant, transparency)
-      vim.g.zenbones_compat = 1
-      vim.g.zenbones_transparent_background = transparency > 0
-      vim.cmd.colorscheme(variant or "zenbones")
+      -- Each flavour reads its own g:<flavour>_transparent_background, and
+      -- only the lush build (not the compat colors/*.vim) honours it.
+      local flavour = variant or "zenbones"
+      vim.g[flavour .. "_transparent_background"] = transparency > 0
+      vim.cmd.colorscheme(flavour)
     end,
   },
 

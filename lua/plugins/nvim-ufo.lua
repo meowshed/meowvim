@@ -6,7 +6,7 @@
 
 return {
   "kevinhwang91/nvim-ufo",
-  event = "BufReadPost",
+  event = { "BufReadPost", "BufNewFile" },
   dependencies = {
     "kevinhwang91/promise-async",
   },
@@ -41,7 +41,4 @@ return {
       end
     end,
   },
-  config = function(_, opts)
-    require("ufo").setup(opts)
-  end,
 }

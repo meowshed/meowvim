@@ -12,9 +12,10 @@ Start Neovim in a project directory with no file arguments. If a session exists
 for that directory, meowvim restores it and runs the project's `on_open`
 command; otherwise the dashboard opens with the recent projects.
 
-Sessions save when the working directory changes. To carry one per Git branch,
-set `sessions.per_branch = true`: the branch becomes part of the session name,
-so switching branches gives you the buffers you had on that branch.
+Sessions save before the working directory changes and when you quit. To carry
+one per Git branch, set `sessions.per_branch = true`: the branch becomes part of
+the session name, so switching branches gives you the buffers you had on that
+branch.
 
 `<leader>qs` restores the session for this directory by hand, and `<leader>ql`
 restores the last one you used anywhere.
@@ -43,6 +44,7 @@ searches symbols across the workspace.
 `<leader>nc` and `<leader>nC` open the call hierarchy for callers and callees,
 and `<leader>nh` and `<leader>nH` open the type hierarchy. These render as trees
 you can expand, which is what makes them worth using over a flat reference list.
+`<leader>nl` reopens the last tree, expanded the way you left it.
 
 In a buffer with no language server, or one whose server does not answer that
 request, these degrade instead of opening an empty window. `<leader>ns` falls
@@ -85,6 +87,10 @@ neither.
 
 `<leader>gxl` puts every conflict in the project into the quickfix list, which
 tells you how much is left.
+
+Diagnostics are off in a buffer while it has conflict markers, because the
+markers make every language server report errors. They come back when you
+resolve the last conflict in that buffer.
 
 ## Review a pull request
 

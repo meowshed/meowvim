@@ -10,6 +10,8 @@ return {
   version = "v2.*", -- v2 deprecates .setup(); we use vim.lsp.config() + vim.lsp.enable() directly
   lazy = false,
   dependencies = {
+    -- blink.cmp adds its completion capabilities to vim.lsp.config("*") when
+    -- it loads, so it has to load before the first server starts.
     "saghen/blink.cmp",
     "b0o/SchemaStore.nvim",
   },
@@ -19,6 +21,18 @@ return {
       vim.notify("Skipping LSP setup in CI/container environment", vim.log.levels.INFO)
       return
     end
+
+    -- docker_compose_language_service attaches only to `yaml.docker-compose`,
+    -- which Neovim's own detection never sets. This spec isn't lazy, so the
+    -- rule is in place before the first buffer opens.
+    vim.filetype.add({
+      filename = {
+        ["docker-compose.yml"] = "yaml.docker-compose",
+        ["docker-compose.yaml"] = "yaml.docker-compose",
+        ["compose.yml"] = "yaml.docker-compose",
+        ["compose.yaml"] = "yaml.docker-compose",
+      },
+    })
 
     -- Float borders come from `vim.o.winborder` (see lua/config/options.lua);
     -- Neovim 0.12 applies it to every floating window, so hover and signature
@@ -45,10 +59,6 @@ return {
         prefix = "",
       },
     })
-
-    local caps = require("blink.cmp").get_lsp_capabilities()
-    caps.textDocument.semanticTokens =
-      vim.tbl_deep_extend("force", caps.textDocument.semanticTokens or {}, { dynamicRegistration = true })
 
     -- `vim.g.inlay_hints_enabled` is owned by utils.toggles (<leader>oi) and
     -- seeded from `toggles.inlay_hints` in the user config, so honour it here
@@ -84,27 +94,17 @@ return {
         settings = {
           Lua = {
             completion = { callSnippet = "Replace" },
-            diagnostics = { globals = { "vim" } },
             workspace = { checkThirdParty = false },
           },
         },
       },
-      bashls = {
-        filetypes = { "sh", "bash", "zsh" },
-      },
+      bashls = {},
       gopls = {
-        root_dir = function(bufnr, on_dir)
-          local root = vim.fs.root(bufnr, { "go.work", "go.mod", ".git" })
-          on_dir(root or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
-        end,
-        filetypes = { "go", "gomod", "gowork", "gotmpl" },
         settings = {
           gopls = {
             gofumpt = true,
             staticcheck = true,
             usePlaceholders = true,
-            completeUnimported = true,
-            semanticTokens = true,
             hints = {
               assignVariableTypes = true,
               compositeLiteralFields = true,
@@ -158,30 +158,35 @@ return {
           client.server_capabilities.documentFormattingProvider = false
         end,
       },
-      emmet_ls = {},
+      emmet_language_server = {},
       marksman = {},
+      -- The SchemaStore catalogs are built in before_init, so a server that
+      -- never starts never pays for them.
       jsonls = {
+        before_init = function(_, client_config)
+          client_config.settings.json.schemas = require("schemastore").json.schemas()
+        end,
         settings = {
           json = {
-            schemas = require("schemastore").json.schemas(),
             validate = { enable = true },
           },
         },
       },
       yamlls = {
+        before_init = function(_, client_config)
+          client_config.settings.yaml.schemas = require("schemastore").yaml.schemas()
+        end,
         settings = {
           yaml = {
-            schemas = require("schemastore").yaml.schemas(),
-            validate = true,
-            hover = true,
-            completion = true,
-            format = { enable = true },
+            -- Use the SchemaStore.nvim catalog instead of fetching the server's
+            -- own; the empty URL avoids a TypeError in yaml-language-server.
+            schemaStore = { enable = false, url = "" },
           },
         },
       },
       dockerls = {},
       docker_compose_language_service = {},
-      ltex = {
+      ltex_plus = {
         settings = {
           ltex = {
             language = "en-US",
@@ -196,15 +201,15 @@ return {
               args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
               onSave = true,
             },
+            -- displayline opens the PDF in Skim and jumps to the cursor line;
+            -- `open -a Skim` only opened the file.
             forwardSearch = {
-              executable = "open",
-              args = { "-a", "Skim", "%p" },
+              executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
+              args = { "%l", "%p", "%f" },
             },
             chktex = {
               onOpenAndSave = true,
-            },
-            lint = {
-              onChange = true,
+              onEdit = true,
             },
           },
         },
@@ -229,29 +234,69 @@ return {
     -- lspconfig v2 ships server definitions in its own lsp/ directory which
     -- Neovim 0.12 auto-discovers. We only supply overrides; cmd/filetypes come
     -- from lspconfig's bundled defaults automatically.
+    -- These servers have a function `cmd` that picks the binary only when the
+    -- client spawns, so Neovim can't see beforehand that it's missing and every
+    -- matching buffer warns. When the binary isn't on PATH, setup_server()
+    -- still starts the server in a project that has it in node_modules/.bin.
+    local function_cmd_binaries = {
+      ts_ls = "typescript-language-server",
+      html = "vscode-html-language-server",
+      cssls = "vscode-css-language-server",
+      jsonls = "vscode-json-language-server",
+      yamlls = "yaml-language-server",
+    }
+
     local function setup_server(server_name)
       local server_opts = vim.tbl_deep_extend("force", {}, server_settings[server_name] or {})
-      -- Resolve binary: prefer explicit cmd override, fall back to lspconfig bundled default.
       -- vim.lsp.config[name] is available in Neovim 0.12 after rtp is set by lazy.nvim.
-      local cmd = server_opts.cmd
-      if not cmd then
-        local default = vim.lsp.config[server_name]
-        cmd = default and default.cmd
-      end
-      -- Skip silently when binary is missing. Function-type cmd (e.g. ts_ls) manages itself.
-      if type(cmd) == "table" and cmd[1] and vim.fn.executable(cmd[1]) == 0 then
+      local default = vim.lsp.config[server_name] or {}
+      -- Skip silently when the binary is missing. Neovim would skip a missing
+      -- table `cmd` too, but it logs an error to lsp.log for every buffer.
+      local cmd = server_opts.cmd or default.cmd
+      local local_binary = function_cmd_binaries[server_name]
+      local binary = local_binary or (type(cmd) == "table" and cmd[1])
+      if local_binary and vim.fn.executable(local_binary) == 0 then
+        -- lspconfig's function cmd prefers <root>/node_modules/.bin, so a
+        -- project that installs the server as a dev dependency still gets it.
+        -- Decide per root: start only where that local binary exists.
+        local default_root_dir = default.root_dir
+        local markers = server_opts.root_markers or default.root_markers or common_root_markers
+        server_opts.root_dir = function(bufnr, on_dir)
+          local function on_root(root)
+            if root and vim.fn.executable(vim.fs.joinpath(root, "node_modules/.bin", local_binary)) == 1 then
+              on_dir(root)
+            end
+          end
+          if type(default_root_dir) == "function" then
+            default_root_dir(bufnr, on_root)
+          else
+            on_root(default_root_dir or vim.fs.root(bufnr, markers))
+          end
+        end
+      elseif binary and vim.fn.executable(binary) == 0 then
         return
       end
-      local custom_on_attach = server_opts.on_attach
 
-      server_opts.capabilities = vim.tbl_deep_extend("force", {}, caps, server_opts.capabilities or {})
+      -- vim.lsp.config() replaces a function when it merges, so the wrapper has
+      -- to call lspconfig's own on_attach, which defines commands such as
+      -- :LspPyrightOrganizeImports and the :LspTexlab* family.
+      local default_on_attach = default.on_attach
+      local custom_on_attach = server_opts.on_attach
       server_opts.on_attach = function(client, bufnr)
+        if default_on_attach then
+          default_on_attach(client, bufnr)
+        end
         on_attach(client, bufnr)
         if custom_on_attach then
           custom_on_attach(client, bufnr)
         end
       end
-      server_opts.root_markers = server_opts.root_markers or common_root_markers
+
+      -- A server's own markers know its config files, so the shared list is
+      -- only a fallback for a server that has no way to find its root.
+      if not (server_opts.root_markers or server_opts.root_dir or default.root_markers or default.root_dir) then
+        server_opts.root_markers = common_root_markers
+      end
 
       vim.lsp.config(server_name, server_opts)
       vim.lsp.enable(server_name)
@@ -264,7 +309,6 @@ return {
     -- GDScript uses a TCP server started by Godot rather than a spawned process
     vim.lsp.config("gdscript", {
       root_markers = { "project.godot", ".git" },
-      capabilities = caps,
       on_attach = on_attach,
     })
     vim.lsp.enable("gdscript")

@@ -13,10 +13,10 @@ return {
       -- without the luv meta types LuaLS reports every call as unknown.
       { path = "${3rd}/luv/library", words = { "vim%.uv" } },
       "lazy.nvim",
-      "snacks.nvim",
+      -- Load the snacks.nvim types only in a workspace that uses `Snacks`.
+      { path = "snacks.nvim", words = { "Snacks" } },
     },
     integrations = {
-      lspconfig = true,
       cmp = false, -- blink.cmp uses its own lazydev source (see blink-cmp.lua)
     },
   },

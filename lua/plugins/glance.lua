@@ -13,7 +13,4 @@ return {
     -- `preview = { type = ..., win = ... }` block was silently ignored.
     detached = true,
   },
-  config = function(_, opts)
-    require("glance").setup(opts)
-  end,
 }

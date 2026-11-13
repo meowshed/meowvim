@@ -11,18 +11,9 @@
 return {
   "nvim-treesitter/nvim-treesitter-context",
   event = { "BufReadPost", "BufNewFile" },
-  dependencies = { "nvim-treesitter/nvim-treesitter" },
   opts = {
-    enable = true,
     max_lines = 3,
     min_window_height = 10,
-    line_numbers = true,
     mode = "topline",
-    trim_scope = "outer",
-    separator = nil,
-    zindex = 20,
   },
-  config = function(_, opts)
-    require("treesitter-context").setup(opts)
-  end,
 }

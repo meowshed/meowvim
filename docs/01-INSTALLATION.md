@@ -46,6 +46,9 @@ it.
 | `<leader>cs` code screenshots | silicon | `cargo install silicon` |
 | GitHub review under `<leader>gh` | GitHub CLI | `brew install gh`, then `gh auth login` |
 | Copilot suggestions | copilot-language-server | see the copilot.lua README |
+| Debugging Go | Delve (`dlv`) | `go install github.com/go-delve/delve/cmd/dlv@latest` |
+| Debugging Python | uv, which runs debugpy for you, or a `python3` with debugpy | `brew install uv`, or `pip install debugpy` |
+| Debugging C# | netcoredbg | a release from github.com/Samsung/netcoredbg, on PATH |
 
 Language servers, formatters, and linters are separate. meowvim configures 17
 servers and starts each one only when its binary is on your PATH, so install

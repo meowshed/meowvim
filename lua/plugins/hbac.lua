@@ -17,13 +17,11 @@ return {
       auto_close_enabled = config.get("performance.buffer_auto_close", true)
     end
 
-    if not auto_close_enabled then
-      return
-    end
-
-    -- autoclose, close_command and close_buffers_with_windows already match
-    -- hbac's defaults; only the threshold comes from the user config.
+    -- Setup runs even with auto-close off, because pinning (<leader>bp, bP,
+    -- bu) still needs hbac's state and commands. close_command and
+    -- close_buffers_with_windows already match hbac's defaults.
     require("hbac").setup({
+      autoclose = auto_close_enabled,
       threshold = threshold,
     })
   end,

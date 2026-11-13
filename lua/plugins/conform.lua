@@ -7,6 +7,12 @@
 -- missing tools unless formatters are named explicitly, so no pre-filtering is
 -- done here. That also matters for project-local mise toolchains: a startup
 -- snapshot would go stale the moment the working directory changes.
+
+--- Whether one of `names` exists in the file's directory or above it.
+local function has_config(ctx, names)
+  return #vim.fs.find(names, { upward = true, path = ctx.dirname, limit = 1 }) > 0
+end
+
 local formatters_by_ft = {
   lua = { "stylua" },
   python = { "ruff_format", "ruff_organize_imports" },
@@ -21,23 +27,31 @@ local formatters_by_ft = {
   html = { "prettierd", "prettier", stop_after_first = true },
   css = { "prettierd", "prettier", stop_after_first = true },
   scss = { "prettierd", "prettier", stop_after_first = true },
-  go = { "goimports", "gofmt" },
+  go = { "goimports" },
   sql = { "pg_format" },
   plpgsql = { "pg_format" },
-  rust = { "rustfmt", lsp_format = "fallback" },
+  rust = { "rustfmt" },
   sh = { "shfmt" },
   bash = { "shfmt" },
   zsh = { "shfmt" },
   c = { "clang_format" },
   cpp = { "clang_format" },
-  cs = { "csharpier", lsp_format = "fallback" },
+  cs = { "csharpier" },
   java = { "google-java-format" },
   gdscript = { "gdformat" },
   gdshader = { "clang_format" },
   tex = { "latexindent" },
   bib = { "bibtex-tidy" },
-  -- Applies to filetypes without an entry above.
-  ["_"] = { "codespell", "trim_whitespace" },
+  -- Applies to filetypes without an entry above. codespell and
+  -- trim_whitespace are always available, so a static list would stop
+  -- `lsp_format = "fallback"` from ever reaching a language server such as
+  -- dockerls. Return nothing when an attached client can format instead.
+  ["_"] = function(bufnr)
+    if #vim.lsp.get_clients({ bufnr = bufnr, method = "textDocument/formatting" }) > 0 then
+      return {}
+    end
+    return { "codespell", "trim_whitespace" }
+  end,
 }
 
 return {
@@ -63,8 +77,6 @@ return {
 
       default_format_opts = {
         timeout_ms = timeout_ms,
-        async = false,
-        quiet = false,
         lsp_format = "fallback", -- Use LSP formatting if no external formatter available
       },
 
@@ -82,6 +94,8 @@ return {
           return
         end
 
+        -- Synchronous, so a slow formatter blocks :w. Keep it short and leave
+        -- the configurable timeout to explicit formatting.
         return { timeout_ms = 750 }
       end,
 
@@ -101,11 +115,25 @@ return {
       end,
 
       formatters = {
-        shfmt = {
-          prepend_args = { "-i", "2", "-ci" },
-        },
+        -- Apply meowvim's style only where the project has no config of its
+        -- own: flags on the command line override a project's config file.
+        -- stylua defaults to tabs, and shfmt ignores .editorconfig as soon as
+        -- any style flag is given.
         stylua = {
-          prepend_args = { "--indent-type", "Spaces", "--indent-width", "2" },
+          prepend_args = function(_, ctx)
+            if has_config(ctx, { "stylua.toml", ".stylua.toml", ".editorconfig" }) then
+              return {}
+            end
+            return { "--indent-type", "Spaces", "--indent-width", "2" }
+          end,
+        },
+        shfmt = {
+          prepend_args = function(_, ctx)
+            if has_config(ctx, { ".editorconfig" }) then
+              return {}
+            end
+            return { "-ci" }
+          end,
         },
         pg_format = {
           prepend_args = { "--spaces", "2", "--comma-start", "--keyword-case", "1" },

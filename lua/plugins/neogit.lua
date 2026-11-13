@@ -7,22 +7,18 @@
 return {
   "NeogitOrg/neogit",
   cmd = { "Neogit" },
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    "echasnovski/mini.icons",
-  },
   opts = {
     -- `disable_commit_confirmation` and `commit_popup` used to be set here;
     -- neither key exists in neogit's config any more and neogit's validator
     -- ignores unknown keys, so they were silently dead.
     integrations = {
+      -- diffview.nvim was removed on purpose in favour of snacks' git_diff
+      -- picker; this keeps neogit from picking it up if it ever comes back.
       diffview = false,
-      snacks = true,
     },
     signs = {
       section = { "", "" },
       item = { "", "" },
-      hunk = { "", "" },
     },
   },
 }

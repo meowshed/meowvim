@@ -15,8 +15,6 @@ return {
       signcolumn = git.enable_signs ~= false,
       current_line_blame = git.blame_line == true,
       current_line_blame_opts = {
-        virt_text = true,
-        virt_text_pos = "eol",
         delay = 500,
       },
     }

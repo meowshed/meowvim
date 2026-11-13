@@ -157,6 +157,9 @@ local function get_theme_for_mode(mode)
   return nil, nil
 end
 
+-- The theme:variant pair whose last apply failed, if any.
+local failed_pair
+
 -- Apply theme based on current mode
 local function apply_mode_theme(mode)
   local theme, variant = get_theme_for_mode(mode)
@@ -164,9 +167,27 @@ local function apply_mode_theme(mode)
     return false
   end
 
+  -- The forced probe shortly after startup lands here even when the theme
+  -- already matches, and reloading it costs a second load and can flash.
+  -- apply_theme() writes core.theme before it applies, so a pair that failed
+  -- also matches the config; never skip that one.
+  local key = theme .. ":" .. tostring(variant)
+  local config_ok, config = pcall(require, "meowvim.config")
+  if
+    config_ok
+    and failed_pair ~= key
+    and vim.g.colors_name
+    and theme == config.get("core.theme", nil)
+    and variant == config.get("core.variant", nil)
+  then
+    return true
+  end
+
   local switcher_ok, switcher = pcall(require, "meowvim.colorscheme_switcher")
   if switcher_ok and switcher.apply_theme then
-    return switcher.apply_theme(theme, variant) ~= false
+    local ok = switcher.apply_theme(theme, variant) ~= false
+    failed_pair = not ok and key or nil
+    return ok
   end
 
   return false

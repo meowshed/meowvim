@@ -63,15 +63,17 @@ local function which_key_groups()
   return groups
 end
 
---- Commands a lazy spec declares, which do not exist until the plugin loads.
-local function lazy_commands()
-  local commands = {}
+--- Commands a lazy spec declares, which do not exist until the plugin loads,
+--- and the keys of specs that a `cond` turned off on this machine. A spec such
+--- as nvim-silicon is off when its binary is missing, and its documented key
+--- is still right for anyone who has the binary.
+local function lazy_declared()
+  local commands, keys = {}, {}
   local ok, lazy = pcall(require, "lazy")
   if not ok then
-    return commands
+    return commands, keys
   end
-  for _, plugin in ipairs(lazy.plugins()) do
-    local cmd = plugin.cmd
+  local function add_commands(cmd)
     if type(cmd) == "string" then
       commands[cmd] = true
     elseif type(cmd) == "table" then
@@ -80,16 +82,38 @@ local function lazy_commands()
       end
     end
   end
-  return commands
+  for _, plugin in ipairs(lazy.plugins()) do
+    add_commands(plugin.cmd)
+  end
+  local config_ok, config = pcall(require, "lazy.core.config")
+  for _, plugin in pairs(config_ok and config.spec.disabled or {}) do
+    -- spec.disabled also holds `enabled = false` specs, which are off on every
+    -- machine, so their keys and commands must not pass for documented ones.
+    -- lazy sets `enabled = false` on cond-disabled specs too, so tell them
+    -- apart by `cond`, which only a cond-gated spec carries.
+    if plugin.cond ~= nil then
+      add_commands(plugin.cmd)
+      for _, key in ipairs(type(plugin.keys) == "table" and plugin.keys or {}) do
+        local lhs = type(key) == "table" and key[1] or key
+        if type(lhs) == "string" then
+          keys[lhs] = true
+        end
+      end
+    end
+  end
+  return commands, keys
 end
 
 local function run()
   local groups = which_key_groups()
-  local declared = lazy_commands()
+  local declared, declared_keys = lazy_declared()
   local leader = vim.g.mapleader or " "
   local problems = {}
 
   local function mapping_exists(suffix)
+    if declared_keys["<leader>" .. suffix] then
+      return true
+    end
     local lhs = leader .. suffix
     for _, mode in ipairs({ "n", "v", "x", "o", "t" }) do
       if vim.fn.maparg(lhs, mode) ~= "" then

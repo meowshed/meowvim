@@ -13,19 +13,30 @@ return {
   -- vim.lsp.config() goes in init because the plugin may start the client before config()
   -- runs, and a client keeps the settings it started with.
   init = function()
-    local caps_ok, blink = pcall(require, "blink.cmp")
-
     vim.lsp.config("roslyn", {
       -- The plugin's default cmd adds --daemon-mode, which only the roslyn-language-server
       -- dotnet tool understands. The mise build (github:Crashdummyy/roslynLanguageServer) is
-      -- the bare Microsoft.CodeAnalysis.LanguageServer and exits on that flag.
-      cmd = { "roslyn-language-server", "--stdio", "--clientProcessId", tostring(vim.uv.os_getpid()) },
-      capabilities = caps_ok and blink.get_lsp_capabilities() or nil,
+      -- the bare Microsoft.CodeAnalysis.LanguageServer and exits on that flag. This list
+      -- replaces the plugin's whole cmd, so it repeats the log directory the plugin sets, and
+      -- it turns telemetry off because the server defaults to "all".
+      cmd = {
+        "roslyn-language-server",
+        "--stdio",
+        "--clientProcessId",
+        tostring(vim.uv.os_getpid()),
+        "--extensionLogDirectory",
+        vim.fs.joinpath(vim.fn.stdpath("log"), "roslyn"),
+        "--telemetryLevel",
+        "off",
+      },
       -- Same rule as the other servers in nvim-lspconfig.lua: <leader>oi owns the hint state.
       on_attach = function(client, bufnr)
         if client.server_capabilities.inlayHintProvider and vim.g.inlay_hints_enabled then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
+        -- The reference and test lenses below stay hidden until code lens is
+        -- enabled for the buffer.
+        vim.lsp.codelens.enable(true, { bufnr = bufnr })
       end,
       settings = {
         ["csharp|inlay_hints"] = {

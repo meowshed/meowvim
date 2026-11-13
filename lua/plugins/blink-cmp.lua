@@ -14,24 +14,24 @@
 --   <Tab>      jump to next snippet placeholder
 --   <S-Tab>    jump to previous snippet placeholder
 --   <CR>       newline (never auto-accepts)
---   <Esc>      dismiss Copilot inline suggestion (stay in insert), else hide
---              blink menu and exit insert
+--   <Esc>      dismiss Copilot inline suggestion and hide blink menu, staying
+--              in insert; with neither visible, exit insert
 --
 -- Copilot inline suggestions (copilot.lua) are separate from blink menu:
--- hide_during_completion=true hides the overlay while the menu is open;
--- <C-l> and <Esc> handle the overlay when the menu is closed.
+-- copilot.lua hides the overlay while the menu is open, on blink's
+-- BlinkCmpMenuOpen and BlinkCmpMenuClose events; <C-l> and <Esc> handle the
+-- overlay when the menu is closed.
 
 return {
   "saghen/blink.cmp",
   version = "1.*",
-  -- Not lazy: nvim-lspconfig needs get_lsp_capabilities() while configuring
-  -- servers at startup, so any `event` here would be bypassed anyway. blink
-  -- does not register its capabilities through `vim.lsp.config` on its own.
+  -- Not lazy: blink's plugin/blink-cmp.lua registers its completion
+  -- capabilities with vim.lsp.config("*") when it's sourced, and that has to
+  -- happen before the first server starts, so any `event` here would be late.
   lazy = false,
   dependencies = {
     "L3MON4D3/LuaSnip",
-    "rafamadriz/friendly-snippets",
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     "ribru17/blink-cmp-spell",
   },
   opts = function()
@@ -103,7 +103,7 @@ return {
       sources = {
         default = { "lsp", "path", "snippets", "buffer", "spell" },
         per_filetype = {
-          lua = { "lazydev", "lsp", "path", "snippets", "buffer", "spell" },
+          lua = { inherit_defaults = true, "lazydev" },
         },
         providers = {
           lazydev = {
@@ -111,21 +111,15 @@ return {
             module = "lazydev.integrations.blink",
             score_offset = 100,
           },
+          -- The source already turns itself off when 'spell' is unset.
           spell = {
             name = "Spell",
             module = "blink-cmp-spell",
-            opts = {
-              keep_all_entries = false,
-              enable_in_context = function()
-                return vim.opt.spell:get()
-              end,
-            },
           },
         },
       },
 
       completion = {
-        accept = { auto_brackets = { enabled = true } },
         menu = {
           draw = {
             components = {
@@ -160,32 +154,20 @@ return {
         enabled = true,
       },
 
-      appearance = {
-        use_nvim_cmp_as_default = false,
-      },
-
       fuzzy = {
-        sorts = { "score", "sort_text" },
-      },
-
-      cmdline = {
-        enabled = true,
-        keymap = { preset = "cmdline" },
-        sources = function()
-          local type = vim.fn.getcmdtype()
-          if type == "/" or type == "?" then
-            return { "buffer" }
-          end
-          if type == ":" then
-            return { "cmdline", "path" }
-          end
-          return {}
-        end,
+        sorts = {
+          -- blink-cmp-spell's README recommends ordering its items by label
+          -- among themselves. Listing sorts replaces blink's default, so the
+          -- default order (score, then sort_text) follows for everything else.
+          function(a, b)
+            if a.source_id == "spell" and b.source_id == "spell" then
+              return require("blink.cmp.fuzzy.sort").label(a, b)
+            end
+          end,
+          "score",
+          "sort_text",
+        },
       },
     }
-  end,
-
-  config = function(_, opts)
-    require("blink.cmp").setup(opts)
   end,
 }

@@ -51,14 +51,15 @@ return {
     -- Only the deltas from nvim-lint's own definitions. Overriding `args`
     -- replaces them wholesale, which is why pylint (`--from-stdin <file>`) and
     -- golangcilint (version-dependent flags) are deliberately left alone.
+    -- nvim-lint takes `args` as a list and fails on a function, so the user's
+    -- config file is looked up once here.
+    local markdownlint_args = { "--stdin" }
+    local markdownlint_config = vim.fn.expand("~/.markdownlint.json")
+    if vim.fn.filereadable(markdownlint_config) == 1 then
+      vim.list_extend(markdownlint_args, { "--config", markdownlint_config })
+    end
     lint.linters.markdownlint = vim.tbl_deep_extend("force", lint.linters.markdownlint, {
-      args = function()
-        local markdownlint_config = vim.fn.expand("~/.markdownlint.json")
-        if vim.fn.filereadable(markdownlint_config) == 1 then
-          return { "--stdin", "--config", markdownlint_config }
-        end
-        return { "--stdin" }
-      end,
+      args = markdownlint_args,
     })
 
     lint.linters.sqlfluff = vim.tbl_deep_extend("force", lint.linters.sqlfluff, {
@@ -70,7 +71,13 @@ return {
     -- every time rather than caching the answer.
     local function is_runnable(name)
       local ok, linter = pcall(function()
-        return lint.linters[name]
+        local definition = lint.linters[name]
+        -- Some linters are defined as a function that builds the table, the
+        -- way try_lint resolves them.
+        if type(definition) == "function" then
+          definition = definition()
+        end
+        return definition
       end)
       if not ok or type(linter) ~= "table" then
         return false
@@ -85,26 +92,49 @@ return {
       return type(cmd) == "string" and vim.fn.executable(cmd) == 1
     end
 
+    -- A compound filetype such as `yaml.docker-compose` has no entry of its
+    -- own, so fall back to the linters of each part, as try_lint does when it
+    -- gets no names.
+    local function linters_for(ft)
+      if lint.linters_by_ft[ft] then
+        return lint.linters_by_ft[ft]
+      end
+      local names, seen = {}, {}
+      for _, part in ipairs(vim.split(ft, ".", { plain = true })) do
+        for _, name in ipairs(lint.linters_by_ft[part] or {}) do
+          if not seen[name] then
+            seen[name] = true
+            table.insert(names, name)
+          end
+        end
+      end
+      return names
+    end
+
     local function lint_buffer()
       if vim.g.lint_enabled == false then
         return
       end
 
-      local names = lint.linters_by_ft[vim.bo.filetype]
-      if not names then
-        return
-      end
-
-      local runnable = vim.tbl_filter(is_runnable, names)
+      local runnable = vim.tbl_filter(is_runnable, linters_for(vim.bo.filetype))
       if #runnable > 0 then
         lint.try_lint(runnable)
       end
     end
 
     if auto_lint then
-      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
+      vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
         group = vim.api.nvim_create_augroup("lint", { clear = true }),
-        callback = vim.schedule_wrap(lint_buffer),
+        callback = function(args)
+          -- By the time the scheduled lint runs, the current buffer can be
+          -- another one, so lint the buffer the event fired for, if it still
+          -- exists.
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(args.buf) then
+              vim.api.nvim_buf_call(args.buf, lint_buffer)
+            end
+          end)
+        end,
       })
     end
 
@@ -112,7 +142,7 @@ return {
 
     vim.api.nvim_create_user_command("LintInfo", function()
       local ft = vim.bo.filetype
-      local names = lint.linters_by_ft[ft] or {}
+      local names = linters_for(ft)
       if #names == 0 then
         vim.notify("No linters configured for filetype: " .. ft, vim.log.levels.INFO)
         return

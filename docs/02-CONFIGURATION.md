@@ -102,7 +102,7 @@ for Go.
 | Option | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `formatters` | table | `{}` | Per-filetype override, replaces the built-in entry |
-| `timeout_ms` | number | `3000` | At least 500 |
+| `timeout_ms` | number | `3000` | At least 500. How long a save of a buffer up to 800 lines waits for the formatter |
 
 `formatters` takes conform formatter names, which are not always the binary
 name: `ruff_format` runs `ruff`, and `clang_format` runs `clang-format`.
@@ -113,8 +113,9 @@ formatting = {
 }
 ```
 
-Buffers up to 800 lines format during the write. Larger ones format
-asynchronously afterwards, and anything past 5000 lines is left alone.
+Buffers up to 800 lines format during the write, and `timeout_ms` limits that
+wait. Larger ones format asynchronously afterwards with a timeout of their own,
+and anything past 5000 lines is left alone.
 
 ## linting
 
@@ -134,17 +135,20 @@ which ones resolve.
 | --- | --- | --- | --- |
 | `enable_signs` | boolean | `true` | gitsigns in the sign column |
 | `blame_line` | boolean | `false` | Inline blame for the current line |
-| `lazygit_theme_sync` | boolean | `true` | Generates a lazygit theme from the active colorscheme |
+| `lazygit_theme_sync` | boolean | `true` | Generates a lazygit theme from the active colorscheme and opens files from lazygit in this Neovim |
 
-meowvim writes the generated theme to its own file under `stdpath("state")` and
-layers it over your lazygit config through `LG_CONFIG_FILE`. It never edits
-your config, which matters when that file is a symlink into a dotfiles tree.
+snacks.nvim runs lazygit, and with this option on it writes the generated theme
+to `lazygit-theme.yml` under `stdpath("cache")` and layers it over your lazygit
+config through `LG_CONFIG_FILE`. It never edits your config, which matters when
+that file is a symlink into a dotfiles tree. The same step points lazygit's
+editor at this Neovim, so `false` turns off both the theme and that editor
+integration.
 
 ## sessions
 
 | Option | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `auto_save` | boolean | `true` | Saves when the working directory changes |
+| `auto_save` | boolean | `true` | Saves before the working directory changes and on exit; `false` turns off both |
 | `auto_restore` | boolean | `true` | Restores on start when a session exists for the directory |
 | `per_branch` | boolean | `false` | Set to `true` for one session per Git branch |
 
@@ -156,7 +160,6 @@ exists for the directory. Otherwise the dashboard opens.
 | Option | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `image_preview` | boolean | `true` | Inline images, needs a terminal with a graphics protocol |
-| `scope_highlighting` | boolean | `true` | |
 | `custom_styles` | boolean | `true` | |
 | `dashboard.show_projects` | number | `8` | Projects listed on the dashboard |
 

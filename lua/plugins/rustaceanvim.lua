@@ -8,10 +8,10 @@ return {
   "mrcjkb/rustaceanvim",
   -- v9 requires Neovim 0.12; pin to v8.0.5 if you need 0.11 support
   version = "^9",
-  ft = { "rust" },
+  -- The plugin lazy-loads itself on Rust buffers, as its README says.
+  lazy = false,
   init = function()
     vim.g.rustaceanvim = {
-      tools = {},
       server = {
         on_attach = function(client, _bufnr)
           -- rust-analyzer 1.96.0 panicked on textDocument/didSave while its VFS
@@ -32,7 +32,7 @@ return {
         default_settings = {
           ["rust-analyzer"] = {
             files = {
-              excludeDirs = {
+              exclude = {
                 ".agents",
                 ".claude",
                 ".codex",
@@ -45,7 +45,6 @@ return {
           },
         },
       },
-      dap = {},
     }
   end,
 }

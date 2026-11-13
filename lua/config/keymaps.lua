@@ -109,6 +109,8 @@ local ICON_EXACT = {
   ["Peek Fold"] = "󰙵",
   ["Open All Folds"] = "󰙵",
   ["Close All Folds"] = "󰙵",
+  ["Open Folds Except Kinds"] = "󰙵",
+  ["Close Folds to Level"] = "󰙵",
   ["Pin All Buffers"] = "󰐄",
   ["Preview Hunk"] = "󰈈",
   ["Profile Startup Time"] = "󰔟",
@@ -129,7 +131,7 @@ local ICON_EXACT = {
   ["Quickfix List"] = "󰁨",
   ["Quit All"] = "󰅚",
   ["Reference"] = "󰈈",
-  ["Refresh CodeLens"] = "",
+  ["Toggle CodeLens"] = "",
   ["Reload Review"] = "󰁯",
   ["Remote Target"] = "󰈣",
   ["Remove Workspace Folder"] = "",
@@ -194,6 +196,7 @@ local ICON_EXACT = {
   ["Type Definition"] = "󰜢",
   ["Type Hierarchy (Subtypes)"] = "󰓼",
   ["Type Hierarchy (Super)"] = "󰓼",
+  ["Reopen Last Hierarchy"] = "󰓼",
   ["Unpin All Buffers"] = "󰐅",
   ["Validate Annotations"] = "󰑤",
   ["View Comment"] = "󰋼",
@@ -267,8 +270,7 @@ local function flash_action(action_name, multi_window)
     if flash then
       if action_name == "jump" then
         flash.jump({
-          search = { max_length = 2 },
-          multi_window = multi_window or false,
+          search = { max_length = 2, multi_window = multi_window or false },
         })
       elseif action_name == "treesitter" then
         flash.treesitter()
@@ -629,6 +631,9 @@ function M.setup()
       {
         "<leader>st",
         function()
+          -- todo-comments registers the picker source in its setup, so load the
+          -- plugin before asking snacks for the source.
+          require("todo-comments")
           snacks.picker.todo_comments()
         end,
         desc = "List TODO Comments",
@@ -712,6 +717,13 @@ function M.setup()
           require("meow.yarn").open_tree("call_hierarchy", "callees")
         end,
         desc = "Call Hierarchy (Callees)",
+      },
+      {
+        "<leader>nl",
+        function()
+          require("meow.yarn").reopen_last()
+        end,
+        desc = "Reopen Last Hierarchy",
       },
       { "<leader>nW", group = "Workspace", icon = "󰙅" },
       { "<leader>nWa", vim.lsp.buf.add_workspace_folder, desc = "Add Workspace Folder" },
@@ -798,8 +810,10 @@ function M.setup()
       { "<leader>cl", vim.lsp.codelens.run, desc = "Run CodeLens" },
       {
         "<leader>cL",
-        vim.lsp.codelens.refresh,
-        desc = "Refresh CodeLens",
+        function()
+          vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+        end,
+        desc = "Toggle CodeLens",
       },
       -- Rust Crates (moved from <leader>cR to avoid conflict with snacks rename)
       { "<leader>cC", group = "Rust Crates", icon = "" },
@@ -848,8 +862,31 @@ function M.setup()
 
       -- Git
       { "<leader>g", group = "Git", icon = "󰊢" },
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
-      { "<leader>gf", "<cmd>LazyGitCurrentFile<cr>", desc = "LazyGit Current File" },
+      {
+        "<leader>gg",
+        function()
+          snacks.lazygit()
+        end,
+        desc = "LazyGit",
+      },
+      {
+        "<leader>gf",
+        function()
+          -- Terminals, help, Neogit and oil:// buffers have no file on disk,
+          -- so fall back to the working directory for those.
+          local name = vim.api.nvim_buf_get_name(0)
+          local is_file = vim.bo.buftype == "" and name ~= "" and not name:match("^%a[%w+.-]*://")
+          local dir = is_file and vim.fs.dirname(name) or vim.fn.getcwd()
+          -- get_root falls back to $GIT_WORK_TREE and returns nil without it.
+          local root = snacks.git.get_root(dir)
+          if not root then
+            vim.notify("Not inside a git repository: " .. dir, vim.log.levels.WARN, { title = "LazyGit" })
+            return
+          end
+          snacks.lazygit({ cwd = root })
+        end,
+        desc = "LazyGit Current File",
+      },
       { "<leader>gn", "<cmd>Neogit<CR>", desc = "Neogit Status" },
       { "<leader>gC", "<cmd>Neogit commit<CR>", desc = "Commit" },
       { "<leader>gp", "<cmd>Neogit pull<CR>", desc = "Pull" },
@@ -1048,6 +1085,7 @@ function M.setup()
 
       -- Review
       { "<leader>r", group = "Review", icon = "" },
+      -- In visual mode add_comment reads the live selection itself (meow.review 0.3.0).
       { "<leader>ra", mr_action("add_comment"), desc = "Add Comment", mode = { "n", "v" } },
       { "<leader>rd", mr_action("delete_comment"), desc = "Delete Comment", mode = { "n", "v" } },
       { "<leader>rE", mr_action("edit_comment"), desc = "Edit Comment" },
@@ -1083,7 +1121,7 @@ function M.setup()
         function()
           local ok, overseer = pcall(require, "overseer")
           if ok then
-            overseer.run_template()
+            overseer.run_task()
           end
         end,
         desc = "Run Task Template",
@@ -1095,7 +1133,7 @@ function M.setup()
           if not ok then
             return
           end
-          local tasks = overseer.list_tasks({ recent_first = true })
+          local tasks = overseer.list_tasks()
           local task = tasks[1]
           if task then
             overseer.run_action(task, "restart")
@@ -1287,7 +1325,9 @@ function M.setup()
 
           vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
           toggles.update("miniindentscope_disable")
-          indentscope.refresh()
+          if vim.g.miniindentscope_disable then
+            indentscope.undraw()
+          end
 
           local level = vim.g.miniindentscope_disable and vim.log.levels.WARN or vim.log.levels.INFO
           local state = vim.g.miniindentscope_disable and "OFF" or "ON"
@@ -1779,6 +1819,7 @@ function M.setup()
   vim.keymap.set("n", "zR", function()
     local ok, ufo = pcall(require, "ufo")
     if ok then
+      vim.b.meowvim_fold_level = nil
       ufo.openAllFolds()
     else
       vim.cmd("normal! zR")
@@ -1788,11 +1829,40 @@ function M.setup()
   vim.keymap.set("n", "zM", function()
     local ok, ufo = pcall(require, "ufo")
     if ok then
+      vim.b.meowvim_fold_level = 0
       ufo.closeAllFolds()
     else
       vim.cmd("normal! zM")
     end
   end, { desc = "Close All Folds" })
+
+  -- ufo keeps foldlevel at 99, so native zr and zm change a number nothing
+  -- reads. These keep a per-buffer level instead and apply it with
+  -- closeFoldsWith(level), which leaves the first `level` levels open: each
+  -- press opens or closes one level, as the built-ins do.
+  local function step_fold_level(delta, native)
+    local ok, ufo = pcall(require, "ufo")
+    if not ok then
+      vim.cmd("normal! " .. vim.v.count1 .. native)
+      return
+    end
+    local depth = 0
+    for lnum = 1, vim.api.nvim_buf_line_count(0) do
+      depth = math.max(depth, vim.fn.foldlevel(lnum))
+    end
+    local level = math.min(vim.b.meowvim_fold_level or depth, depth)
+    level = math.max(0, math.min(depth, level + delta * vim.v.count1))
+    vim.b.meowvim_fold_level = level
+    ufo.closeFoldsWith(level)
+  end
+
+  vim.keymap.set("n", "zr", function()
+    step_fold_level(1, "zr")
+  end, { desc = "Open One Fold Level" })
+
+  vim.keymap.set("n", "zm", function()
+    step_fold_level(-1, "zm")
+  end, { desc = "Close One Fold Level" })
 end
 
 return M

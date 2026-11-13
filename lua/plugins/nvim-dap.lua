@@ -20,7 +20,12 @@ return {
         local dapui = require("dapui")
         dapui.setup()
         local dap = require("dap")
-        dap.listeners.after.event_initialized["dapui_config"] = function()
+        -- Open as the attach or launch request goes out, the hooks the dap-ui
+        -- README uses, so the UI is up before the adapter's first output.
+        dap.listeners.before.attach["dapui_config"] = function()
+          dapui.open()
+        end
+        dap.listeners.before.launch["dapui_config"] = function()
           dapui.open()
         end
         dap.listeners.before.event_terminated["dapui_config"] = function()
@@ -37,6 +42,8 @@ return {
     },
     {
       "leoluz/nvim-dap-go",
+      -- dap-go only launches Delve, so without dlv it has nothing to offer.
+      cond = vim.fn.executable("dlv") == 1,
       config = function()
         require("dap-go").setup()
       end,
@@ -44,10 +51,12 @@ return {
     {
       "mfussenegger/nvim-dap-python",
       config = function()
-        -- Use system python3 for the debugpy adapter binary; per-project
-        -- pythonPath (what runs the program) is resolved lazily by dap-python
-        -- via VIRTUAL_ENV, .venv, pyenv, etc. at session start.
-        require("dap-python").setup("python3")
+        -- "uv" runs the debugpy adapter with `uv run --with debugpy`, so no
+        -- Python on the machine needs debugpy installed. Without uv, fall back
+        -- to a python3 that has debugpy. The pythonPath that runs the program
+        -- is still resolved per project by dap-python via VIRTUAL_ENV, .venv,
+        -- pyenv, etc. at session start.
+        require("dap-python").setup(vim.fn.executable("uv") == 1 and "uv" or "python3")
       end,
     },
   },

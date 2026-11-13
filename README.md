@@ -6,7 +6,7 @@
 
 meowvim is a Neovim configuration for Neovim 0.12. It bundles the plugins you
 would expect, and it keeps your own settings in a single Lua file that it
-validates and reloads as you save. 83 plugins are declared and 17 load at
+validates and reloads as you save. 81 plugins are declared and 15 load at
 startup; the rest wait until you use them.
 
 Language servers, formatters, and linters are checked when they run, not when
@@ -15,7 +15,7 @@ here, and a machine that lacks one does without that feature.
 
 ## Features
 
-- One settings file at `~/.config/meowvim/config.lua` with 56 validated
+- One settings file at `~/.config/meowvim/config.lua` with 55 validated
   options. A watcher reloads it 500 ms after you save and waits if you are in
   insert mode.
 - 17 colorschemes with 69 variants. meowvim reads the system appearance and
@@ -40,8 +40,8 @@ and blink.cmp with Copilot for completion. 17 language servers run through
 `vim.lsp.config`, with 27 treesitter parsers on top of the 7 Neovim ships,
 conform, and nvim-lint. Git is
 gitsigns, Neogit, and LazyGit, plus pull request review through the GitHub CLI.
-Tests run under neotest for Go, Python, Jest, and Vitest; nvim-dap debugs Go,
-Python, C#, and Godot.
+Tests run under neotest for Go, Python, Jest, Vitest, Rust, and C# (through
+neotest-vstest); nvim-dap debugs Go, Python, C#, and Godot.
 
 ## Requirements
 

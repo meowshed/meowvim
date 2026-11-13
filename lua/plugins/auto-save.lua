@@ -15,7 +15,6 @@ return {
       immediate_save = { "BufLeave", "FocusLost" },
     },
     debounce_delay = 1500,
-    write_all_buffers = true,
     lockmarks = true,
     condition = function(buf)
       if vim.g.disable_autosave then
@@ -31,12 +30,11 @@ return {
         return false
       end
 
-      local excluded_filetypes = {
-        "gitcommit",
-        "toggleterm",
-        "lazy",
-        "snacks_picker_list",
-      }
+      -- Terminals, pickers and plugin windows such as lazy all set a buftype,
+      -- so the check below rejects them and only real files need listing here.
+      -- A commit message is one: once it is written, quitting with :q! no
+      -- longer aborts the commit.
+      local excluded_filetypes = { "gitcommit" }
 
       if vim.fn.getbufvar(buf, "&buftype") ~= "" then
         return false

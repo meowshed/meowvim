@@ -75,8 +75,10 @@ instead, or switch `core.day_night_mode` to `manual`.
 
 ### No server attaches
 
-meowvim starts a server only when its binary is on your PATH.
-`:checkhealth meowvim` lists the ones it found, and `:checkhealth vim.lsp` shows
+meowvim starts a server only when its binary is on your PATH. That includes the
+TypeScript, HTML, CSS, JSON, and YAML servers, so a copy installed only in a
+project's `node_modules/.bin` doesn't enable them; install them globally or
+through mise. `:checkhealth meowvim` lists the ones it found, and `:checkhealth vim.lsp` shows
 the live clients.
 
 Neovim 0.12 ships its own `:lsp` command, and nvim-lspconfig stops before
@@ -141,11 +143,14 @@ lazygit is not installed. Run `brew install lazygit` or `apt install lazygit`.
 
 ### lazygit looks unthemed
 
-meowvim generates a theme from the active colorscheme into its own file under
-`~/.local/state/nvim/meowvim/`, then layers it over yours through
-`LG_CONFIG_FILE`. It never edits your lazygit config.
+snacks.nvim opens lazygit. It generates a theme from the active colorscheme into
+`~/.cache/nvim/lazygit-theme.yml`, then layers it over your config through
+`LG_CONFIG_FILE`. It never edits your lazygit config. If lazygit still looks
+unthemed, check that `git.lazygit_theme_sync` is `true`.
 
-To keep your own colours, set `git.lazygit_theme_sync = false`.
+To keep your own colours, set `git.lazygit_theme_sync = false`. That also turns
+off lazygit's editor integration, so a file you open from lazygit no longer
+opens in this Neovim.
 
 ### The diff pickers are empty
 
@@ -165,9 +170,11 @@ it for the session. It also needs `copilot-language-server` on your PATH, and
 
 ### `:Copilot auth` fails
 
-Check that Node.js runs at all. A version manager shim with no version selected
-exists on PATH and fails when executed, which looks like a missing binary from
-inside Neovim.
+copilot.lua runs the standalone `copilot-language-server` binary, not Node.js.
+Check that `copilot-language-server --version` prints a version, and run
+`:checkhealth meowvim`, which reports the binary as missing or as found but not
+runnable. A version manager shim with no version selected exists on PATH and
+fails when executed, which looks like a missing binary from inside Neovim.
 
 Run `:Copilot signout`, then retry.
 
@@ -176,7 +183,7 @@ Run `:Copilot signout`, then retry.
 ### Startup feels slow
 
 `<leader>oPl` lists the plugins by load time. `<leader>oPt` compares the last
-100 starts, which is the one that shows a regression. meowvim loads 17 plugins
+100 starts, which is the one that shows a regression. meowvim loads 15 plugins
 at startup and the rest on demand.
 
 ### Typing lags in a large file
