@@ -14,14 +14,14 @@ return {
   -- runs, and a client keeps the settings it started with.
   init = function()
     vim.lsp.config("roslyn", {
-      -- The plugin's default cmd adds --daemon-mode, which only the roslyn-language-server
-      -- dotnet tool understands. The mise build (github:Crashdummyy/roslynLanguageServer) is
-      -- the bare Microsoft.CodeAnalysis.LanguageServer and exits on that flag. This list
-      -- replaces the plugin's whole cmd, so it repeats the log directory the plugin sets, and
-      -- it turns telemetry off because the server defaults to "all".
+      -- The server is the roslyn-language-server dotnet tool, which mise installs
+      -- (dotnet:roslyn-language-server). This list replaces the plugin's whole cmd to turn
+      -- telemetry off, because the server defaults to "all", so it repeats every flag the
+      -- plugin passes. --daemon-mode lets several Neovim sessions share one server process.
       cmd = {
         "roslyn-language-server",
         "--stdio",
+        "--daemon-mode",
         "--clientProcessId",
         tostring(vim.uv.os_getpid()),
         "--extensionLogDirectory",
